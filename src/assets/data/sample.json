@@ -1,0 +1,41 @@
+{
+  "locations": [
+    {
+      "name": "Mausoleum-2",
+      "lots": {
+        "available": 4,
+        "reserved": 1
+      }
+    },
+    {
+      "name": "Memory-F1",
+      "lots": {
+        "available": 7,
+        "reserved": 5
+      }
+    }
+  ],
+  "dummy": [
+    {
+      "no": 1,
+      "name": "",
+      "born": "",
+      "died": "",
+      "street": ""
+    },
+    {
+      "no": 2,
+      "name": "",
+      "born": "",
+      "died": "",
+      "street": ""
+    },
+    {
+      "no": 3,
+      "name": "",
+      "born": "",
+      "died": "",
+      "street": ""
+    }
+  ]
+}

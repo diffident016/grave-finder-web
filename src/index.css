@@ -11,3 +11,9 @@
   font-family: 'Lato-bold';
   src: url('./assets/fonts/Lato-Bold.ttf');
 }
+
+@layer base {
+  body {
+      @apply bg-[#F1F2F5];
+  }
+}
