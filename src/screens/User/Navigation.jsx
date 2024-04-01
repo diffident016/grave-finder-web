@@ -1,5 +1,6 @@
 import React from "react";
 import SampleMap from "../../components/SampleMap";
+import map from "../../assets/images/map.svg";
 
 function Navigation() {
   return (

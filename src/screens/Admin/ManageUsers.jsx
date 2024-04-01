@@ -1,8 +1,9 @@
 import React, { useMemo } from "react";
 import DataTable from "react-data-table-component";
 import data from "../../assets/data/sample.json";
+import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 
-function Records() {
+function ManageUsers() {
   const columns = useMemo(() => [
     {
       name: "No.",
@@ -10,51 +11,43 @@ function Records() {
       width: "60px",
     },
     {
-      name: "Name of the Deceased",
+      name: "Custom Users",
       selector: (row) => row.name,
-      width: "350px",
-    },
-    {
-      name: "Born",
-      selector: (row) => row.born,
-      width: "160px",
-    },
-    {
-      name: "Died",
-      selector: (row) => row.died,
-      width: "160px",
-    },
-    {
-      name: "Street",
-      selector: (row) => row.street,
       width: "300px",
     },
-    // {
-    //   name: "Actions",
-    //   cell: function (row) {
-    //     return (
-    //       <div
-    //         onClick={() => {}}
-    //         className="cursor-pointer flex flex-row w-[100px] h-full items-center text-sm gap-2"
-    //       >
-    //         <Delete className="" fontSize="inherit" />
-    //         Delete
-    //       </div>
-    //     );
-    //   },
-    //   width: "200px",
-    // },
+    {
+      name: "Actions",
+      cell: function (row) {
+        return (
+          <div
+            onClick={() => {}}
+            className="cursor-pointer flex flex-row w-[100px] h-full items-center text-sm gap-2"
+          >
+            <TrashIcon className="w-4" fontSize="inherit" />
+            Delete
+          </div>
+        );
+      },
+      width: "150px",
+    },
   ]);
+
   return (
     <div className="w-full flex flex-col p-4 gap-4">
       <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center">
-        <h1 className="font-lato-bold text-xl">List of Deceased Person</h1>
+        <h1 className="font-lato-bold text-xl">List of Users</h1>
+        <h1
+          onClick={() => {}}
+          className="px-2 cursor-pointer flex gap-1 font-lato-bold text-sm text-white w-24 shadow-sm py-2 rounded-lg justify-center bg-[#4F73DF]"
+        >
+          <span>{<PlusIcon className="w-5" />}</span> New
+        </h1>
       </div>
       <div className="bg-white rounded-lg border">
         <DataTable
           className="font-roboto rounded-md h-full overflow-hidden"
           columns={columns}
-          data={data["dummy"]}
+          data={[]}
           customStyles={{
             rows: {
               style: {
@@ -82,4 +75,4 @@ function Records() {
   );
 }
 
-export default Records;
+export default ManageUsers;

@@ -18,24 +18,24 @@
   "dummy": [
     {
       "no": 1,
-      "name": "",
-      "born": "",
-      "died": "",
-      "street": ""
+      "name": "Sample Person 1",
+      "born": "1978",
+      "died": "1999",
+      "street": "Sample Street 1"
     },
     {
       "no": 2,
-      "name": "",
-      "born": "",
-      "died": "",
-      "street": ""
+      "name": "Sample Person 2",
+      "born": "1965",
+      "died": "2000",
+      "street": "Sample Street 2"
     },
     {
       "no": 3,
-      "name": "",
-      "born": "",
-      "died": "",
-      "street": ""
+      "name": "Sample Person 2",
+      "born": "1975",
+      "died": "2005",
+      "street": "Sample Street 3"
     }
   ]
 }

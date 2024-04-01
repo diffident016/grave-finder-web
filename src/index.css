@@ -17,3 +17,7 @@
       @apply bg-[#F1F2F5];
   }
 }
+
+#mapImage{
+  pointer-events: auto !important;
+}

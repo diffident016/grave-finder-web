@@ -2,14 +2,17 @@ import React from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 
-function SampleMap() {
+function SampleMap({ img }) {
   return (
-    <div className="relative overflow-auto ">
+    <div className="relative overflow-hidden h-full">
       <TransformWrapper
         initialScale={1.8}
         initialPositionX={0}
         initialPositionY={-150}
         centerZoomedOut
+        onZoom={(val) => {
+          console.log(val["state"]);
+        }}
       >
         {({ zoomIn, zoomOut, ...rest }) => (
           <>
@@ -58,10 +61,17 @@ function SampleMap() {
             </div>
             <TransformComponent>
               <img
-                src="/map.png"
-                style={{ width: "50%", height: "80%" }}
+                id="mapImage"
+                src={img || "/map.png"}
+                style={{
+                  width: "50%",
+                  height: "80%",
+                }}
                 className="object-cover"
                 useMap="#workmap"
+                // onClick={() => {
+                //   window.alert("hello");
+                // }}
               />
 
               <map name="workmap">
