@@ -1,5 +1,7 @@
 import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
+import { CircularProgress } from "@mui/material";
 
 function SignIn({ setScreen }) {
   const [onLogin, setLogin] = useState(false);
@@ -15,6 +17,21 @@ function SignIn({ setScreen }) {
   );
 
   const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
+    setLogin(true);
+    try {
+      await login(form.email, form.password);
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+      setLogin(false);
+      updateForm({ error: "Invalid email or password." });
+    }
+  };
 
   return (
     <div className="bg-white h-[450px] w-[80%] rounded-lg shadow-sm">
@@ -23,7 +40,10 @@ function SignIn({ setScreen }) {
         <p className="font-lato py-2">
           Enter your email and password to Sign In.
         </p>
-        <form className="flex flex-col z-10 w-[350px] py-2 font-lato-bold">
+        <form
+          onSubmit={handleSignIn}
+          className="flex flex-col z-10 w-[350px] py-2 font-lato-bold"
+        >
           <label className="py-1 text-sm">Email Address</label>
           <input
             type="text"

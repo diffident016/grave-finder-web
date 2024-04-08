@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import DataTable from "react-data-table-component";
 import data from "../../assets/data/sample.json";
 
-function Records() {
+function Records({ slots }) {
   const columns = useMemo(() => [
     {
       name: "No.",
@@ -11,22 +11,22 @@ function Records() {
     },
     {
       name: "Name of the Deceased",
-      selector: (row) => row.name,
+      selector: (row) => row["Name"],
       width: "350px",
     },
     {
       name: "Born",
-      selector: (row) => row.born,
+      selector: (row) => row["Born"],
       width: "160px",
     },
     {
       name: "Died",
-      selector: (row) => row.died,
+      selector: (row) => row["Died"],
       width: "160px",
     },
     {
       name: "Street",
-      selector: (row) => row.street,
+      selector: (row) => `${row["block_name"]} - ${row["lot_no"]}`,
       width: "300px",
     },
     // {
@@ -46,15 +46,15 @@ function Records() {
     // },
   ]);
   return (
-    <div className="w-full flex flex-col p-4 gap-4">
-      <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center">
-        <h1 className="font-lato-bold text-xl">List of Deceased Person</h1>
-      </div>
-      <div className="bg-white rounded-lg border">
+    <div className="w-full h-full flex flex-col overflow-hidden p-4">
+      <div className="w-full h-full flex flex-col  bg-white border rounded-lg p-2">
+        <div className="w-full h-16 px-4 py-4 flex flex-row justify-between items-center">
+          <h1 className="font-lato-bold text-xl">List of Deceased Person</h1>
+        </div>
         <DataTable
-          className="font-roboto rounded-md h-full overflow-hidden"
+          className="font-roboto  h-full overflow-hidden rounded-lg"
           columns={columns}
-          data={data["dummy"]}
+          data={slots["slots"]}
           customStyles={{
             rows: {
               style: {
@@ -73,7 +73,7 @@ function Records() {
             },
           }}
           persistTableHead
-          pagination
+          pagination={true}
           fixedHeader
           allowOverflow
         />

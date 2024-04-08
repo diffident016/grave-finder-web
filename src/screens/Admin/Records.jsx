@@ -2,8 +2,12 @@ import React, { useMemo } from "react";
 import DataTable from "react-data-table-component";
 import data from "../../assets/data/sample.json";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useDispatch } from "react-redux";
+import { show } from "../../states/alerts";
 
 function Records() {
+  const dispatch = useDispatch();
+
   const columns = useMemo(() => [
     {
       name: "No.",
@@ -51,7 +55,16 @@ function Records() {
       <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center">
         <h1 className="font-lato-bold text-xl">List of Deceased Person</h1>
         <h1
-          onClick={() => {}}
+          onClick={() => {
+            dispatch(
+              show({
+                type: "success",
+                message: "Product added successfully.",
+                duration: 3000,
+                show: true,
+              })
+            );
+          }}
           className="px-2 cursor-pointer flex gap-1 font-lato-bold text-sm text-white w-24 shadow-sm py-2 rounded-lg justify-center bg-[#4F73DF]"
         >
           <span>{<PlusIcon className="w-5" />}</span> New

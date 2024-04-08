@@ -1,4 +1,6 @@
 import React, { useReducer, useState } from "react";
+import { addUser } from "../api/Services";
+import { useAuth } from "../auth/AuthContext";
 
 function SignUp({ setScreen }) {
   const [onSignup, setSignup] = useState(false);
@@ -7,7 +9,9 @@ function SignUp({ setScreen }) {
       return { ...prev, ...next };
     },
     {
-      name: "",
+      fname: "",
+      lname: "",
+      username: "",
       email: "",
       password: "",
       confirm_password: "",
@@ -15,19 +19,64 @@ function SignUp({ setScreen }) {
     }
   );
 
+  const { signup, login, deleteAcc } = useAuth();
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    let currentUser;
+
+    try {
+      currentUser = await signup(form.email, form.password);
+      await addUser(currentUser.user.uid, form);
+      await login(form.email, form.password);
+    } catch (err) {
+      if (currentUser) deleteAcc();
+      console.log(err);
+    }
+  };
+
   return (
-    <div className="bg-white h-[520px] w-[80%] rounded-lg shadow-sm">
+    <div className="bg-white h-[560px] w-[80%] rounded-lg shadow-sm">
       <div className="flex flex-col px-4 py-6 items-center">
         <h1 className="font-lato-bold text-3xl">Welcome!</h1>
-        <form className="flex flex-col z-10 w-[350px] py-2 font-lato-bold">
-          <label className="py-1 text-sm">Full Name</label>
+        <form
+          onSubmit={handleSignup}
+          className="flex flex-col z-10 w-[350px] py-2 font-lato-bold"
+        >
+          <div className="flex flex-row justify-between w-[350px]">
+            <div className="flex flex-col w-[49%]">
+              <label className="py-1 text-sm">First Name</label>
+              <input
+                type="text"
+                value={form.fname}
+                className="px-2 border text-[#1F2F3D] border-[#1F2F3D] h-9 rounded-lg"
+                required={true}
+                onChange={(e) => {
+                  updateForm({ fname: e.target.value });
+                }}
+              />
+            </div>
+            <div className="flex flex-col w-[49%]">
+              <label className="py-1 text-sm">Last Name</label>
+              <input
+                type="text"
+                value={form.lname}
+                className="px-2 border text-[#1F2F3D] border-[#1F2F3D] h-9 rounded-lg"
+                required={true}
+                onChange={(e) => {
+                  updateForm({ lname: e.target.value });
+                }}
+              />
+            </div>
+          </div>
+          <label className="py-1 text-sm">Username</label>
           <input
             type="text"
-            value={form.name}
+            value={form.username}
             className="px-2 border text-[#1F2F3D] border-[#1F2F3D] h-9 rounded-lg"
             required={true}
             onChange={(e) => {
-              updateForm({ name: e.target.value });
+              updateForm({ username: e.target.value });
             }}
           />
           <label className="py-1 text-sm">Email Address</label>
@@ -56,6 +105,14 @@ function SignUp({ setScreen }) {
           <label className="pt-1 py-1 text-sm">Confirm Password</label>
           <input
             type="password"
+            onBlur={(e) => {
+              if (form.password != form.confirm_password) {
+                console.log(form.confirm_password);
+                e.target.setCustomValidity("Password does not matched.");
+              } else {
+                e.target.setCustomValidity("");
+              }
+            }}
             value={form.confirm_password}
             className="px-2 border text-[#1F2F3D] border-[#1F2F3D] h-9 rounded-lg"
             required={true}
@@ -64,7 +121,7 @@ function SignUp({ setScreen }) {
             }}
           />
           <div className="pt-3 flex flex-row items-center gap-1">
-            <input type="checkbox" className="h-4 w-4 rounded-sm" />
+            <input required type="checkbox" className="h-4 w-4 rounded-sm" />
             <p className="cursor-pointer self-start underline text-sm">
               Terms and Conditions
             </p>
@@ -90,12 +147,12 @@ function SignUp({ setScreen }) {
           >
             {form.error}
           </p>
-          <label className="h-[1px] border-b border-[#555C68]/40 mt-4" />
+          <label className="h-[1px] border-b border-[#555C68]/40 mt-2" />
           <p
             onClick={() => {
               setScreen(0);
             }}
-            className="text-center py-3 text-[#4F73DF] cursor-pointer select-none"
+            className="text-center py-2 text-[#4F73DF] cursor-pointer select-none"
           >
             Already have an account?
           </p>
