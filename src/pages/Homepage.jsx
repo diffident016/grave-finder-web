@@ -18,6 +18,7 @@ import { getSlots, onSnapshot } from "../api/Services";
 
 function Homepage({ user }) {
   const [screen, setScreen] = useState(0);
+  const [navigate, setNavigate] = useState(null);
 
   const dispatch = useDispatch();
   const alert = useSelector((state) => state.alert.value);
@@ -94,13 +95,26 @@ function Homepage({ user }) {
     },
     {
       label: "Map",
-      component: <Map slots={slots} user={user} />,
+      component: (
+        <Map
+          slots={slots}
+          user={user}
+          setNavigation={setNavigate}
+          setScreen={setScreen}
+        />
+      ),
       icon: <MapIcon />,
       header: "",
     },
     {
       label: "Navigation",
-      component: <Navigation />,
+      component: (
+        <Navigation
+          slots={slots}
+          navigate={navigate}
+          setNavigate={setNavigate}
+        />
+      ),
       icon: <MapPinIcon />,
       header: "",
     },

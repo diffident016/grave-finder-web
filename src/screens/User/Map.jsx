@@ -16,7 +16,7 @@ import {
 } from "react-leaflet";
 import { polygon } from "leaflet";
 
-function Map({ slots, user }) {
+function Map({ slots, user, setScreen, setNavigation }) {
   const [map, setMap] = useState(null);
   const [details, setDetails] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
@@ -98,7 +98,6 @@ function Map({ slots, user }) {
     });
 
     setPolygons(newPoly);
-    // map.setView(map.getCenter(), 18.5);
   }, [slots["slots"], map]);
 
   return (
@@ -199,7 +198,14 @@ function Map({ slots, user }) {
             </div>
             {!isSubmit ? (
               <div className="flex flex-row gap-2 pb-2">
-                <button className="h-10 border border-transparent flex-1 rounded-lg font-lato-bold bg-[#4F73DF] text-white">
+                <button
+                  onClick={() => {
+                    setNavigation(details);
+                    setShowInfo(false);
+                    setScreen(3);
+                  }}
+                  className="h-10 border border-transparent flex-1 rounded-lg font-lato-bold bg-[#4F73DF] text-white"
+                >
                   Navigation
                 </button>
                 <button

@@ -74,7 +74,7 @@ function Records({ slots }) {
         <DataTable
           className="font-roboto  h-full overflow-hidden rounded-lg"
           columns={columns}
-          data={slots["slots"]}
+          data={slots["groupSlots"]["Occupied"]}
           customStyles={{
             rows: {
               style: {

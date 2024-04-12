@@ -59,10 +59,18 @@ function AdminHomepage({ user }) {
           return temp;
         });
 
+        const group = data.reduce((group, slot) => {
+          const { Status } = slot;
+          group[Status] = group[Status] ?? [];
+          group[Status].push(slot);
+          return group;
+        }, {});
+
         setSlots({
           fetchState: 1,
           slots: data,
           count: data.length,
+          groupSlots: group,
         });
       });
 
@@ -101,7 +109,7 @@ function AdminHomepage({ user }) {
     },
     {
       label: "Reservations",
-      component: <Reservation />,
+      component: <Reservation slots={slots} />,
       icon: <TagIcon />,
       header: "",
     },
