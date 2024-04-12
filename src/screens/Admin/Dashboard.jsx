@@ -9,7 +9,10 @@ function Dashboard() {
         <div className="flex flex-row gap-8 py-4">
           {data["locations"].map((item) => {
             return (
-              <div className="w-[300px] h-[160px] bg-white rounded-md shadow-sm border-l-4 border-[#4F73DF]">
+              <div
+                key={item}
+                className="w-[300px] h-[160px] bg-white rounded-md shadow-sm border-l-4 border-[#4F73DF]"
+              >
                 <div className="flex flex-col h-full justify-center px-4 gap-2">
                   <h1 className="font-lato-bold text-4xl text-[#4F73DF]">
                     {item["lots"]["available"]}

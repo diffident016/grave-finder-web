@@ -5,7 +5,7 @@ import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
 import { show } from "../../states/alerts";
 
-function Records() {
+function Records({ slots }) {
   const dispatch = useDispatch();
 
   const columns = useMemo(() => [
@@ -16,23 +16,23 @@ function Records() {
     },
     {
       name: "Name of the Deceased",
-      selector: (row) => row.name,
-      width: "300px",
+      selector: (row) => row["Name"],
+      width: "250px",
     },
     {
       name: "Born",
-      selector: (row) => row.born,
-      width: "120px",
+      selector: (row) => row["Born"],
+      width: "150px",
     },
     {
       name: "Died",
-      selector: (row) => row.died,
-      width: "120px",
+      selector: (row) => row["Died"],
+      width: "150px",
     },
     {
       name: "Street",
-      selector: (row) => row.street,
-      width: "300px",
+      selector: (row) => `${row["block_name"]} - ${row["lot_no"]}`,
+      width: "200px",
     },
     {
       name: "Actions",
@@ -51,30 +51,30 @@ function Records() {
     },
   ]);
   return (
-    <div className="w-full flex flex-col p-4 gap-4">
-      <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center">
-        <h1 className="font-lato-bold text-xl">List of Deceased Person</h1>
-        <h1
-          onClick={() => {
-            dispatch(
-              show({
-                type: "success",
-                message: "Product added successfully.",
-                duration: 3000,
-                show: true,
-              })
-            );
-          }}
-          className="px-2 cursor-pointer flex gap-1 font-lato-bold text-sm text-white w-24 shadow-sm py-2 rounded-lg justify-center bg-[#4F73DF]"
-        >
-          <span>{<PlusIcon className="w-5" />}</span> New
-        </h1>
-      </div>
-      <div className="bg-white rounded-lg border">
+    <div className="w-full h-full flex flex-col overflow-hidden p-4">
+      <div className="w-full h-full flex flex-col  bg-white border rounded-lg p-2">
+        <div className="w-full h-16 px-4 py-4 flex flex-row justify-between items-center">
+          <h1 className="font-lato-bold text-xl">List of Deceased Person</h1>
+          <h1
+            onClick={() => {
+              dispatch(
+                show({
+                  type: "success",
+                  message: "Product added successfully.",
+                  duration: 3000,
+                  show: true,
+                })
+              );
+            }}
+            className="px-2 cursor-pointer flex gap-1 font-lato-bold text-sm text-white w-24 shadow-sm py-2 rounded-lg justify-center bg-[#4F73DF]"
+          >
+            <span>{<PlusIcon className="w-5" />}</span> New
+          </h1>
+        </div>
         <DataTable
-          className="font-roboto rounded-md h-full overflow-hidden"
+          className="font-roboto  h-full overflow-hidden rounded-lg"
           columns={columns}
-          data={data["dummy"]}
+          data={slots["slots"]}
           customStyles={{
             rows: {
               style: {
@@ -93,7 +93,7 @@ function Records() {
             },
           }}
           persistTableHead
-          pagination
+          pagination={true}
           fixedHeader
           allowOverflow
         />

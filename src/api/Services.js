@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 
 import { db, storage } from "../../firebase";
+import { format } from "date-fns";
 
 const getUser = (userId) => {
   return getDoc(doc(db, "Users", userId));
@@ -39,4 +40,57 @@ const getSlots = () => {
   return slotsRef;
 };
 
-export { getUser, addUser, getSlots };
+const getTransactionNo = async () => {
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  const reservationRef = collection(db, "Slots");
+
+  return new Promise((resolve, reject) => {
+    getDocs(
+      query(
+        reservationRef,
+        where("updatedAt", ">", today),
+        where("Status", "==", "Reserved")
+      )
+    )
+      .then((val) => {
+        resolve(`${format(today, "MMddyy")}-${val.size + 1}`);
+      })
+      .catch((e) => reject(e));
+  });
+};
+
+const reservedLot = (docId, form) => {
+  const docRef = doc(db, "Slots", docId);
+
+  return updateDoc(docRef, {
+    Name: form.Name,
+    Status: "Reserved",
+    Born: form.Born,
+    Died: form.Died,
+    updatedAt: Timestamp.now(),
+  });
+};
+
+const deleteReservation = (docId) => {
+  const docRef = doc(db, "Slots", docId);
+
+  return updateDoc(docRef, {
+    Name: null,
+    Status: "Available",
+    Born: null,
+    Died: null,
+    updatedAt: Timestamp.now(),
+  });
+};
+
+export {
+  getUser,
+  addUser,
+  getSlots,
+  onSnapshot,
+  getTransactionNo,
+  reservedLot,
+  deleteReservation,
+};

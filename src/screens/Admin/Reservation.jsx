@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useReducer, useState } from "react";
 import DataTable from "react-data-table-component";
 import data from "../../assets/data/sample.json";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
@@ -6,6 +6,7 @@ import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 function Reservation() {
   const [searchItems, setSearchItems] = useState([]);
   const [query, setQuery] = useState("");
+  const [isAdd, setAdd] = useState(false);
 
   const columns = useMemo(() => [
     {
@@ -57,7 +58,9 @@ function Reservation() {
           <div className="w-full flex flex-row justify-between items-center">
             <h1 className="font-lato-bold text-xl">Reservations</h1>
             <h1
-              onClick={() => {}}
+              onClick={() => {
+                setAdd(true);
+              }}
               className="px-2 cursor-pointer flex gap-1 font-lato-bold text-sm text-white shadow-sm py-2 rounded-lg justify-center bg-[#4F73DF]"
             >
               <span>{<PlusIcon className="w-5" />}</span> Add Reservation

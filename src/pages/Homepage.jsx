@@ -14,8 +14,7 @@ import Dashboard from "../screens/User/Dashboard";
 import { Alert, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { hide } from "../states/alerts";
-import { getSlots } from "../api/Services";
-import { onSnapshot } from "firebase/firestore";
+import { getSlots, onSnapshot } from "../api/Services";
 
 function Homepage({ user }) {
   const [screen, setScreen] = useState(0);
@@ -53,13 +52,22 @@ function Homepage({ user }) {
         var data = snapshot.docs.map((doc, index) => {
           var temp = doc.data();
           temp["no"] = index + 1;
+          temp["id"] = doc.id;
           return temp;
         });
+
+        const group = data.reduce((group, slot) => {
+          const { Status } = slot;
+          group[Status] = group[Status] ?? [];
+          group[Status].push(slot);
+          return group;
+        }, {});
 
         setSlots({
           fetchState: 1,
           slots: data,
           count: data.length,
+          groupSlots: group,
         });
       });
 
@@ -86,7 +94,7 @@ function Homepage({ user }) {
     },
     {
       label: "Map",
-      component: <Map />,
+      component: <Map slots={slots} user={user} />,
       icon: <MapIcon />,
       header: "",
     },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import Dashboard from "../screens/Admin/Dashboard";
 import Records from "../screens/Admin/Records";
 import Reports from "../screens/Admin/Reports";
@@ -17,12 +17,62 @@ import Navbar from "../components/Navbar";
 import { Alert, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { hide } from "../states/alerts";
+import { getSlots, onSnapshot } from "../api/Services";
 
 function AdminHomepage({ user }) {
   const [screen, setScreen] = useState(0);
 
   const dispatch = useDispatch();
   const alert = useSelector((state) => state.alert.value);
+
+  const [slots, setSlots] = useReducer(
+    (prev, next) => {
+      return { ...prev, ...next };
+    },
+    {
+      fetchState: 0,
+      slots: [],
+      groupSlots: [],
+      count: 0,
+    }
+  );
+
+  useEffect(() => {
+    const query = getSlots();
+
+    try {
+      const unsub = onSnapshot(query, (snapshot) => {
+        if (!snapshot) {
+          setSlots({ fetchState: -1 });
+          return;
+        }
+
+        if (snapshot.empty) {
+          setSlots({ fetchState: 2 });
+          return;
+        }
+
+        var data = snapshot.docs.map((doc, index) => {
+          var temp = doc.data();
+          temp["no"] = index + 1;
+          temp["id"] = doc.id;
+          return temp;
+        });
+
+        setSlots({
+          fetchState: 1,
+          slots: data,
+          count: data.length,
+        });
+      });
+
+      return () => {
+        unsub();
+      };
+    } catch {
+      setSlots({ fetchState: -1 });
+    }
+  }, []);
 
   const screens = [
     {
@@ -33,7 +83,7 @@ function AdminHomepage({ user }) {
     },
     {
       label: "Deceased Records",
-      component: <Records />,
+      component: <Records slots={slots} />,
       icon: <ClipboardDocumentIcon />,
       header: "",
     },
@@ -58,25 +108,23 @@ function AdminHomepage({ user }) {
   ];
   return (
     <div className="w-full h-screen flex flex-row font-lato text-[#555C68]">
-      <div className="w-[24%] h-full">
-        <Sidebar screens={screens} screen={screen} setScreen={setScreen} />
-      </div>
-      <div className="w-full h-full flex flex-col">
+      <Sidebar screens={screens} screen={screen} setScreen={setScreen} />
+      <div className="w-full h-full flex flex-col overflow-hidden">
         <Navbar user={user} />
         {screens[screen].component}
-        {alert.show && (
-          <Snackbar
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            open={alert.show}
-            autoHideDuration={alert.duration}
-            onClose={() => {
-              dispatch(hide());
-            }}
-          >
-            <Alert severity={alert.type}>{alert.message}</Alert>
-          </Snackbar>
-        )}
       </div>
+      {alert.show && (
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          open={alert.show}
+          autoHideDuration={alert.duration}
+          onClose={() => {
+            dispatch(hide());
+          }}
+        >
+          <Alert severity={alert.type}>{alert.message}</Alert>
+        </Snackbar>
+      )}
     </div>
   );
 }
