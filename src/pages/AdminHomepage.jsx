@@ -18,7 +18,9 @@ import { Alert, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { hide } from "../states/alerts";
 import {
+  addReservation,
   getAvailableLots,
+  getReservations,
   getSlots,
   getUsers,
   onSnapshot,
@@ -39,6 +41,17 @@ function AdminHomepage({ user }) {
       slots: [],
       groupSlots: [],
       blocks: [],
+      count: 0,
+    }
+  );
+
+  const [reservations, setReservations] = useReducer(
+    (prev, next) => {
+      return { ...prev, ...next };
+    },
+    {
+      fetchState: 0,
+      data: [],
       count: 0,
     }
   );
@@ -186,6 +199,42 @@ function AdminHomepage({ user }) {
     }
   }, []);
 
+  useEffect(() => {
+    const query = getReservations();
+
+    try {
+      const unsub = onSnapshot(query, (snapshot) => {
+        if (!snapshot) {
+          setReservations({ fetchState: -1 });
+          return;
+        }
+
+        if (snapshot.empty) {
+          setReservations({ fetchState: 2 });
+          return;
+        }
+
+        var data = snapshot.docs.map((doc, index) => {
+          var temp = doc.data();
+          temp["no"] = index + 1;
+          return temp;
+        });
+
+        setReservations({
+          fetchState: 1,
+          data: data,
+          count: data.length,
+        });
+      });
+
+      return () => {
+        unsub();
+      };
+    } catch {
+      setReservations({ fetchState: -1 });
+    }
+  }, []);
+
   const screens = [
     {
       label: "Dashboard",
@@ -201,7 +250,7 @@ function AdminHomepage({ user }) {
     },
     {
       label: "Reports",
-      component: <Reports />,
+      component: <Reports reservations={reservations} />,
       icon: <ChartPieIcon />,
       header: "",
     },

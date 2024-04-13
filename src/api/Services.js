@@ -82,13 +82,16 @@ const getTransactionNo = async () => {
 const reservedLot = (docId, form) => {
   const docRef = doc(db, "Slots", docId);
 
-  return updateDoc(docRef, {
-    Name: form.Name,
-    Status: "Reserved",
-    Born: form.Born,
-    Died: form.Died,
-    updatedAt: Timestamp.now(),
-  });
+  return Promise.all([
+    updateDoc(docRef, {
+      Name: form.Name,
+      Status: "Reserved",
+      Born: form.Born,
+      Died: form.Died,
+      updatedAt: Timestamp.now(),
+    }),
+    addReservation(form),
+  ]);
 };
 
 const getUserById = (userId) => {
@@ -136,6 +139,19 @@ const updateRecord = (docId, form) => {
   });
 };
 
+const addReservation = (form) => {
+  var temp = form;
+  temp["updatedAt"] = Timestamp.now();
+
+  return setDoc(doc(collection(db, "Reservations")), temp);
+};
+
+const getReservations = () => {
+  const rRef = collection(db, "Reservations");
+
+  return rRef;
+};
+
 export {
   getUser,
   getUsers,
@@ -150,4 +166,6 @@ export {
   updateRecord,
   getAvailableLots,
   updateAvailableLots,
+  addReservation,
+  getReservations,
 };

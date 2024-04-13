@@ -7,7 +7,7 @@ import { format, isValid } from "date-fns";
 import AddReservation from "./AddReservation";
 import { show } from "../../states/alerts";
 import { useDispatch } from "react-redux";
-import { approveReservation } from "../../api/Services";
+import { approveReservation, deleteReservation } from "../../api/Services";
 
 function Reservation({ slots }) {
   const [searchItems, setSearchItems] = useState(null);
@@ -60,7 +60,9 @@ function Reservation({ slots }) {
               View
             </div>
             <div
-              onClick={() => {}}
+              onClick={() => {
+                handleDelete(row.id);
+              }}
               className="cursor-pointer flex-1 flex flex-row h-full items-center text-sm gap-1"
             >
               <TrashIcon className="w-4" fontSize="inherit" />
@@ -80,6 +82,34 @@ function Reservation({ slots }) {
           show({
             type: "success",
             message: "Reservation has been approved.",
+            duration: 3000,
+            show: true,
+          })
+        );
+
+        setView(null);
+      })
+      .catch((err) => {
+        dispatch(
+          show({
+            type: "error",
+            message: "Something went wrong.",
+            duration: 3000,
+            show: true,
+          })
+        );
+        setView(null);
+        console.log(err);
+      });
+  };
+
+  const handleDelete = (id) => {
+    deleteReservation(id)
+      .then((_) => {
+        dispatch(
+          show({
+            type: "success",
+            message: "Reservation has been deleted.",
             duration: 3000,
             show: true,
           })
