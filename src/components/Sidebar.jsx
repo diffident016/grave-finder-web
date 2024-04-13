@@ -3,7 +3,7 @@ import logo from "../assets/images/logo.png";
 
 function Sidebar({ screens, screen, setScreen }) {
   return (
-    <div className="w-[24%] h-full bg-[#4F73DF] text-white">
+    <div className="w-[24%] h-full bg-[#4F73DF] text-white select-none">
       <div className="flex flex-col h-full w-full">
         <div className="flex h-20 items-center px-2 gap-2 select-none">
           <img src={logo} className="w-16 h-16 cursor-pointer" />

@@ -10,7 +10,7 @@ function ReservationForm({ user, showReserve, showSubmit }) {
       firstname: "",
       lastname: "",
       Name: "",
-      Bord: "",
+      Born: "",
       Died: "",
       transaction: "",
     }

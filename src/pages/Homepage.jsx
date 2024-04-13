@@ -14,7 +14,7 @@ import Dashboard from "../screens/User/Dashboard";
 import { Alert, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { hide } from "../states/alerts";
-import { getSlots, onSnapshot } from "../api/Services";
+import { getAvailableLots, getSlots, onSnapshot } from "../api/Services";
 
 function Homepage({ user }) {
   const [screen, setScreen] = useState(0);
@@ -22,6 +22,48 @@ function Homepage({ user }) {
 
   const dispatch = useDispatch();
   const alert = useSelector((state) => state.alert.value);
+
+  const [lots, setLots] = useReducer(
+    (prev, next) => {
+      return { ...prev, ...next };
+    },
+    {
+      fetchState: 0,
+      lots: [],
+      count: 0,
+    }
+  );
+
+  useEffect(() => {
+    const query = getAvailableLots();
+
+    try {
+      const unsub = onSnapshot(query, (snapshot) => {
+        if (!snapshot) {
+          setLots({ fetchState: -1 });
+          return;
+        }
+
+        if (snapshot.empty) {
+          setLots({ fetchState: 2 });
+          return;
+        }
+
+        var data = snapshot.data();
+
+        setLots({
+          fetchState: 1,
+          lots: data,
+        });
+      });
+
+      return () => {
+        unsub();
+      };
+    } catch {
+      setLots({ fetchState: -1 });
+    }
+  }, []);
 
   const [slots, setSlots] = useReducer(
     (prev, next) => {
@@ -83,7 +125,7 @@ function Homepage({ user }) {
   const screens = [
     {
       label: "Dashboard",
-      component: <Dashboard />,
+      component: <Dashboard lots={lots} />,
       icon: <Squares2X2Icon />,
       header: "",
     },

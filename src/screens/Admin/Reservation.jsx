@@ -1,15 +1,21 @@
 import React, { useMemo, useReducer, useState } from "react";
 import DataTable from "react-data-table-component";
-import data from "../../assets/data/sample.json";
 import { TrashIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { DocumentIcon } from "@heroicons/react/24/outline";
 import { Backdrop } from "@mui/material";
+import { format, isValid } from "date-fns";
+import AddReservation from "./AddReservation";
+import { show } from "../../states/alerts";
+import { useDispatch } from "react-redux";
+import { approveReservation } from "../../api/Services";
 
 function Reservation({ slots }) {
-  const [searchItems, setSearchItems] = useState([]);
+  const [searchItems, setSearchItems] = useState(null);
   const [query, setQuery] = useState("");
   const [isAdd, setAdd] = useState(false);
   const [view, setView] = useState(null);
+
+  const dispatch = useDispatch();
 
   const columns = useMemo(() => [
     {
@@ -24,12 +30,14 @@ function Reservation({ slots }) {
     },
     {
       name: "Born",
-      selector: (row) => row.Born,
+      selector: (row) =>
+        !isValid(Date.parse(row.Born)) ? "" : format(row.Born, "	MMMM dd, yyyy"),
       width: "150px",
     },
     {
       name: "Died",
-      selector: (row) => row.Died,
+      selector: (row) =>
+        !isValid(Date.parse(row.Died)) ? "" : format(row.Died, "	MMMM dd, yyyy"),
       width: "150px",
     },
     {
@@ -65,12 +73,86 @@ function Reservation({ slots }) {
     },
   ]);
 
-  return (
+  const handleApprove = () => {
+    approveReservation(view["id"])
+      .then((_) => {
+        dispatch(
+          show({
+            type: "success",
+            message: "Reservation has been approved.",
+            duration: 3000,
+            show: true,
+          })
+        );
+
+        setView(null);
+      })
+      .catch((err) => {
+        dispatch(
+          show({
+            type: "error",
+            message: "Something went wrong.",
+            duration: 3000,
+            show: true,
+          })
+        );
+        setView(null);
+        console.log(err);
+      });
+  };
+
+  const search = (query) => {
+    var newSlots = slots["groupSlots"]["Reserved"];
+
+    newSlots = newSlots.filter((slot) => {
+      var name = slot["Name"].toLowerCase().indexOf(query.toLowerCase());
+      var street = `${slot["block_name"]} ${slot["lot_no"]}`
+        .toLowerCase()
+        .indexOf(query.toLowerCase());
+
+      return name !== -1 || street !== -1;
+    });
+
+    return newSlots;
+  };
+
+  return isAdd ? (
+    <AddReservation
+      slots={slots}
+      close={() => {
+        setAdd(false);
+      }}
+    />
+  ) : (
     <div className="w-full h-full p-4 overflow-hidden flex flex-col gap-4">
       <div className="w-full h-full flex flex-col bg-white border rounded-lg p-4">
         <div className="w-full flex flex-col h-20 gap-2">
-          <div className="w-full flex flex-row justify-between items-center">
+          <div className="w-full flex flex-row justify-between items-center h-12">
             <h1 className="font-lato-bold text-xl">Reservations</h1>
+          </div>
+          <div className="flex flex-row justify-between h-12 items-center">
+            <div className="flex flex-row w-60 items-center gap-1">
+              <input
+                value={query}
+                onChange={(e) => {
+                  const query = e.target.value;
+                  setQuery(query);
+                  setSearchItems(search(query));
+                }}
+                className="px-2 text-sm rounded-md h-9 w-60 border focus:outline-none"
+                placeholder="Search name..."
+              />
+              {query != "" && (
+                <p
+                  onClick={() => {
+                    setQuery("");
+                  }}
+                  className="text-sm cursor-pointer opacity-60"
+                >
+                  clear
+                </p>
+              )}
+            </div>
             <h1
               onClick={() => {
                 setAdd(true);
@@ -80,33 +162,11 @@ function Reservation({ slots }) {
               <span>{<PlusIcon className="w-5" />}</span> Add Reservation
             </h1>
           </div>
-          <div className="flex flex-row w-60 items-center gap-1">
-            <input
-              value={query}
-              onChange={(e) => {
-                const query = e.target.value;
-                setQuery(query);
-                //setSearchItems(search(query));
-              }}
-              className="px-2 text-sm rounded-md h-9 w-60 border focus:outline-none"
-              placeholder="Search name..."
-            />
-            {query != "" && (
-              <p
-                onClick={() => {
-                  setQuery("");
-                }}
-                className="text-sm cursor-pointer opacity-60"
-              >
-                clear
-              </p>
-            )}
-          </div>
         </div>
         <DataTable
           className="font-roboto rounded-md h-full overflow-hidden"
           columns={columns}
-          data={slots["groupSlots"]["Reserved"]}
+          data={searchItems || slots["groupSlots"]["Reserved"]}
           customStyles={{
             rows: {
               style: {
@@ -168,7 +228,7 @@ function Reservation({ slots }) {
               </div>
               <button
                 onClick={() => {
-                  setView(null);
+                  handleApprove();
                 }}
                 className="mt-4 h-10 border border-transparent rounded-lg font-lato-bold bg-[#4F73DF] text-white"
               >

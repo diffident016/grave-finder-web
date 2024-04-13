@@ -15,6 +15,7 @@ import {
   Polyline,
 } from "react-leaflet";
 import { polygon } from "leaflet";
+import { format } from "date-fns";
 
 function Map({ slots, user, setScreen, setNavigation }) {
   const [map, setMap] = useState(null);
@@ -33,7 +34,7 @@ function Map({ slots, user, setScreen, setNavigation }) {
 
     const form = {
       Name: firstname + " " + lastname,
-      Born: Born,
+      Born: format(Born, ""),
       Died: Died,
     };
 
@@ -82,10 +83,6 @@ function Map({ slots, user, setScreen, setNavigation }) {
         ],
         { color: statusColor(item["Status"]) }
       ).addEventListener("click", async () => {
-        if (item["Status"] == "Reserved") {
-          await deleteReservation(item["id"]);
-          return;
-        }
         if (item["Status"] != "Available") {
           return window.alert("This lot is not available.");
         }

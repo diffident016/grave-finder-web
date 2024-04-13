@@ -2,8 +2,9 @@ import React, { useMemo } from "react";
 import DataTable from "react-data-table-component";
 import data from "../../assets/data/sample.json";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { getUserById } from "../../api/Services";
 
-function ManageUsers() {
+function ManageUsers({ users }) {
   const columns = useMemo(() => [
     {
       name: "No.",
@@ -12,42 +13,27 @@ function ManageUsers() {
     },
     {
       name: "Custom Users",
-      selector: (row) => row.name,
-      width: "300px",
+      selector: (row) => `${row["fname"]} ${row["lname"]}`,
+      width: "250px",
     },
     {
-      name: "Actions",
-      cell: function (row) {
-        return (
-          <div
-            onClick={() => {}}
-            className="cursor-pointer flex flex-row w-[100px] h-full items-center text-sm gap-2"
-          >
-            <TrashIcon className="w-4" fontSize="inherit" />
-            Delete
-          </div>
-        );
-      },
-      width: "150px",
+      name: "Email",
+      selector: (row) => row.email,
+      width: "300px",
     },
   ]);
 
   return (
-    <div className="w-full flex flex-col p-4 gap-4">
-      <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center">
-        <h1 className="font-lato-bold text-xl">List of Users</h1>
-        <h1
-          onClick={() => {}}
-          className="px-2 cursor-pointer flex gap-1 font-lato-bold text-sm text-white w-24 shadow-sm py-2 rounded-lg justify-center bg-[#4F73DF]"
-        >
-          <span>{<PlusIcon className="w-5" />}</span> New
-        </h1>
-      </div>
-      <div className="bg-white rounded-lg border">
+    <div className="w-full h-full flex flex-col p-4 gap-4 overflow-hidden">
+      <div className="w-full h-full flex flex-col  bg-white border rounded-lg p-2">
+        <div className="w-full h-16 px-4 py-4 flex flex-row justify-between items-center">
+          <h1 className="font-lato-bold text-xl">List of Users</h1>
+        </div>
+
         <DataTable
           className="font-roboto rounded-md h-full overflow-hidden"
           columns={columns}
-          data={[]}
+          data={users["users"]}
           customStyles={{
             rows: {
               style: {

@@ -1,8 +1,11 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import data from "../../assets/data/sample.json";
 
 function Records({ slots }) {
+  const [searchItems, setSearchItems] = useState(null);
+  const [query, setQuery] = useState("");
+
   const columns = useMemo(() => [
     {
       name: "No.",
@@ -45,16 +48,54 @@ function Records({ slots }) {
     //   width: "200px",
     // },
   ]);
+
+  const search = (query) => {
+    var newSlots = slots["groupSlots"]["Occupied"];
+
+    newSlots = newSlots.filter((slot) => {
+      var name = slot["Name"].toLowerCase().indexOf(query.toLowerCase());
+      var street = `${slot["block_name"]} ${slot["lot_no"]}`
+        .toLowerCase()
+        .indexOf(query.toLowerCase());
+
+      return name !== -1 || street !== -1;
+    });
+
+    return newSlots;
+  };
+
   return (
     <div className="w-full h-full flex flex-col overflow-hidden p-4">
       <div className="w-full h-full flex flex-col  bg-white border rounded-lg p-2">
         <div className="w-full h-16 px-4 py-4 flex flex-row justify-between items-center">
           <h1 className="font-lato-bold text-xl">List of Deceased Person</h1>
         </div>
+        <div className="flex flex-row w-full items-center gap-1 px-4">
+          <input
+            value={query}
+            onChange={(e) => {
+              const query = e.target.value;
+              setQuery(query);
+              setSearchItems(search(query));
+            }}
+            className="px-2 text-sm rounded-md h-9 w-60 border focus:outline-none"
+            placeholder="Search name..."
+          />
+          {query != "" && (
+            <p
+              onClick={() => {
+                setQuery("");
+              }}
+              className="text-sm cursor-pointer opacity-60"
+            >
+              clear
+            </p>
+          )}
+        </div>
         <DataTable
           className="font-roboto  h-full overflow-hidden rounded-lg"
           columns={columns}
-          data={slots["groupSlots"]["Occupied"]}
+          data={searchItems || slots["groupSlots"]["Occupied"]}
           customStyles={{
             rows: {
               style: {
