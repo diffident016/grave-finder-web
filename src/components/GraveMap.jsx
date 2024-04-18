@@ -13,6 +13,21 @@ import RoutingMachine from "./RoutingMachine";
 import { deleteReservation } from "../api/Services";
 import { Search } from "@mui/icons-material";
 
+import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
+});
+
 function GraveMap({ map, setMap, slots, showDetails }) {
   const [query, setQuery] = useState("");
   const [searchItem, setSearchItems] = useState(null);
@@ -84,7 +99,7 @@ function GraveMap({ map, setMap, slots, showDetails }) {
       setMarker(null);
     }
 
-    setMarker(L.marker(slot).addTo(map));
+    setMarker(L.marker(slot, { icon: iconDefault }).addTo(map));
     map.setView(slot, map.getZoom());
   };
 

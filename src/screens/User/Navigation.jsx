@@ -14,6 +14,21 @@ import {
   Polyline,
 } from "react-leaflet";
 
+import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
+});
+
 function Navigation({ slots, navigate, setNavigate }) {
   const [query, setQuery] = useState("");
   const [searchItem, setSearchItems] = useState(null);
@@ -68,6 +83,12 @@ function Navigation({ slots, navigate, setNavigate }) {
       ],
       lineOptions: { styles: [{ color: "#242c81", weight: 3 }] },
       altLineOptions: { styles: [{ color: "#ed6852", weight: 3 }] },
+      createMarker: function (i, start, n) {
+        var marker = L.marker(start.latLng, {
+          icon: iconDefault,
+        });
+        return marker;
+      },
       show: false,
       addWaypoints: true,
       routeWhileDragging: true,
