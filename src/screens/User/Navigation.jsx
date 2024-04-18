@@ -2,6 +2,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Search } from "@mui/icons-material";
 import { Backdrop } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
+import "leaflet/dist/images/marker-shadow.png";
 
 import {
   MapContainer,
@@ -28,13 +29,13 @@ function Navigation({ slots, navigate, setNavigate }) {
         className="h-full z-0"
         center={[14.110906767590265, 121.55069557584935]}
         zoom={18}
-        maxBounds={[
-          [14.111812009494454, 121.54861954598962],
-          [14.109991116967368, 121.54863027482598],
-          [14.111884844893801, 121.55188647669641],
-          [14.110032737531318, 121.55190793436911],
-        ]}
-        maxBoundsViscosity={1}
+        // maxBounds={[
+        //   [14.111812009494454, 121.54861954598962],
+        //   [14.109991116967368, 121.54863027482598],
+        //   [14.111884844893801, 121.55188647669641],
+        //   [14.110032737531318, 121.55190793436911],
+        // ]}
+        // maxBoundsViscosity={1}
       >
         <TileLayer
           maxZoom={19.8}
@@ -61,7 +62,10 @@ function Navigation({ slots, navigate, setNavigate }) {
     }
 
     const temp = L.Routing.control({
-      waypoints: [currentLoc, [navigate.Latitude, navigate.Longitude]],
+      waypoints: [
+        [14.110811, 121.552335],
+        [navigate.Latitude, navigate.Longitude],
+      ],
       lineOptions: { styles: [{ color: "#242c81", weight: 3 }] },
       altLineOptions: { styles: [{ color: "#ed6852", weight: 3 }] },
       show: false,
