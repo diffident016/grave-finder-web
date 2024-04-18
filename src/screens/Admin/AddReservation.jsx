@@ -138,6 +138,7 @@ function AddReservation({ close, slots }) {
                 type="date"
                 required
                 value={form.Born}
+                max={format(Date.now(), "yyyy-MM-dd")}
                 className="px-2 border text-[#555C68] border-[#555C68]/40 h-9 rounded-lg focus:outline-none shadow-sm"
                 onChange={(e) => {
                   updateForm({ Born: e.target.value });
@@ -150,6 +151,9 @@ function AddReservation({ close, slots }) {
                 type="date"
                 required
                 value={form.Died}
+                disabled={!form.Born}
+                min={form.Born ? format(form.Born, "yyyy-MM-dd") : null}
+                max={format(Date.now(), "yyyy-MM-dd")}
                 className="px-2 border text-[#555C68] border-[#555C68]/40 h-9 rounded-lg focus:outline-none shadow-sm"
                 onChange={(e) => {
                   updateForm({ Died: e.target.value });

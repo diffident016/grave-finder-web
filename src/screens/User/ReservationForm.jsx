@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { getTransactionNo } from "../../api/Services";
+import { format } from "date-fns";
 
 function ReservationForm({ user, showReserve, showSubmit }) {
   const [form, updateForm] = useReducer(
@@ -86,6 +87,7 @@ function ReservationForm({ user, showReserve, showSubmit }) {
               <input
                 type="date"
                 value={form.Born}
+                max={format(Date.now(), "yyyy-MM-dd")}
                 className="px-2 border text-[#555C68] border-[#555C68]/40 h-9 rounded-lg focus:outline-none shadow-sm"
                 required={true}
                 onChange={(e) => {
@@ -98,6 +100,9 @@ function ReservationForm({ user, showReserve, showSubmit }) {
               <input
                 type="date"
                 value={form.Died}
+                disabled={!form.Born}
+                min={form.Born ? format(form.Born, "yyyy-MM-dd") : null}
+                max={format(Date.now(), "yyyy-MM-dd")}
                 className="px-2 border text-[#555C68] border-[#555C68]/40 h-9 rounded-lg focus:outline-none shadow-sm"
                 required={true}
                 onChange={(e) => {

@@ -120,6 +120,7 @@ function UpdateForm({ record, close, slots }) {
               <label className="py-1 text-base font-lato-bold">Born</label>
               <input
                 type="date"
+                max={format(Date.now(), "yyyy-MM-dd")}
                 value={
                   form.Born ||
                   (isValid(Date.parse(record["Born"]))
@@ -136,6 +137,15 @@ function UpdateForm({ record, close, slots }) {
               <label className="py-1 text-base font-lato-bold">Died</label>
               <input
                 type="date"
+                disabled={!form.Born && !isValid(Date.parse(record["Born"]))}
+                min={
+                  form.Born
+                    ? format(form.Born, "yyyy-MM-dd")
+                    : isValid(Date.parse(record["Born"]))
+                    ? format(record["Born"], "yyyy-MM-dd")
+                    : ""
+                }
+                max={format(Date.now(), "yyyy-MM-dd")}
                 value={
                   form.Died ||
                   (isValid(Date.parse(record["Died"]))
