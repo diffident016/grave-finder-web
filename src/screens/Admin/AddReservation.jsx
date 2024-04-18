@@ -17,11 +17,15 @@ function AddReservation({ close, slots }) {
       Died: "",
       block_name: "",
       lot_no: "",
+      reservedBy: "Admin",
     }
   );
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    var newForm = form;
+    newForm["lot_no"] = e.target[4].value;
 
     var available = slots["groupSlots"]["Available"];
 
@@ -50,7 +54,8 @@ function AddReservation({ close, slots }) {
       return;
     }
 
-    reservedLot(docId[0]["id"], form)
+    close();
+    reservedLot(docId[0]["id"], newForm)
       .then((_) => {
         dispatch(
           show({
@@ -60,8 +65,6 @@ function AddReservation({ close, slots }) {
             show: true,
           })
         );
-
-        close();
       })
       .catch((err) => {
         dispatch(

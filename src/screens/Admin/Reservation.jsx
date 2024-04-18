@@ -20,7 +20,7 @@ function Reservation({ slots }) {
   const columns = useMemo(() => [
     {
       name: "Lot #",
-      selector: (row) => row.no,
+      selector: (row) => row.lot_no,
       width: "80px",
     },
     {

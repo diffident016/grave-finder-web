@@ -14,6 +14,7 @@ function ReservationForm({ user, showReserve, showSubmit }) {
       Born: "",
       Died: "",
       transaction: "",
+      reservedBy: `${user["fname"]} ${user["lname"]}`,
     }
   );
 

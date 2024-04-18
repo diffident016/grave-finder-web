@@ -34,13 +34,13 @@ function Records({ slots }) {
     {
       name: "Born",
       selector: (row) =>
-        !isValid(Date.parse(row.Born)) ? "" : format(row.Born, "	MMMM dd, yyyy"),
+        !isValid(Date.parse(row.Born)) ? "" : format(row.Born, "MMMM dd, yyyy"),
       width: "160px",
     },
     {
       name: "Died",
       selector: (row) =>
-        !isValid(Date.parse(row.Died)) ? "" : format(row.Died, "	MMMM dd, yyyy"),
+        !isValid(Date.parse(row.Died)) ? "" : format(row.Died, "MMMM dd, yyyy"),
       width: "160px",
     },
     {

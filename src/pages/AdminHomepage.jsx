@@ -250,7 +250,7 @@ function AdminHomepage({ user }) {
     },
     {
       label: "Reports",
-      component: <Reports reservations={reservations} />,
+      component: <Reports slots={slots} reservations={reservations} />,
       icon: <ChartPieIcon />,
       header: "",
     },

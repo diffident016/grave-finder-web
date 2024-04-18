@@ -46,6 +46,16 @@ const getUsers = () => {
   return userRef;
 };
 
+const updateUser = (docId, form) => {
+  const docRef = doc(db, "Users", docId);
+
+  return updateDoc(docRef, {
+    fname: form.fname,
+    lname: form.lname,
+    updatedAt: Timestamp.now(),
+  });
+};
+
 const getAvailableLots = () => {
   const lotsRef = doc(db, "Available Lots", "locations");
 
@@ -155,6 +165,7 @@ const getReservations = () => {
 export {
   getUser,
   getUsers,
+  updateUser,
   addUser,
   getSlots,
   onSnapshot,
