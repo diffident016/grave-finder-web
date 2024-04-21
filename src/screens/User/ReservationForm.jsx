@@ -82,7 +82,19 @@ function ReservationForm({ user, showReserve, showSubmit }) {
               }}
             />
           </div>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-col flex-1">
+            <label className="py-1 text-base font-lato-bold">
+              Date Reserved
+            </label>
+            <input
+              type="text"
+              disabled
+              value={format(Date.now(), "yyyy-MM-dd")}
+              className="px-2 border text-[#555C68] border-[#555C68]/40 h-9 rounded-lg focus:outline-none shadow-sm"
+              required={true}
+            />
+          </div>
+          {/* <div className="flex flex-row gap-2">
             <div className="flex flex-col flex-1">
               <label className="py-1 text-base font-lato-bold">Born</label>
               <input
@@ -111,7 +123,7 @@ function ReservationForm({ user, showReserve, showSubmit }) {
                 }}
               />
             </div>
-          </div>
+          </div> */}
           <div className="flex flex-col">
             <label className="py-1 text-base font-lato-bold">User</label>
             <input
