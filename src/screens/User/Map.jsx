@@ -34,7 +34,7 @@ function Map({ slots, user, setScreen, setNavigation }) {
 
     const form = {
       Name: firstname + " " + lastname,
-      Born: format(Born, ""),
+      Born: Born,
       Died: Died,
     };
 
@@ -151,7 +151,14 @@ function Map({ slots, user, setScreen, setNavigation }) {
       >
         {(showInfo || !!isSubmit) && (
           <div
-            style={{ width: !isSubmit ? "350px" : "450px" }}
+            style={{
+              width: !details["Installment"]
+                ? !isSubmit
+                  ? "350px"
+                  : "450px"
+                : "450px",
+              height: !details["Installment"] ? "280px" : "350px",
+            }}
             className="w-[350px] h-[280px] bg-white/80 rounded-lg flex flex-col p-4 text-[#555C68]"
           >
             <div className="flex flex-row justify-between items-center">
@@ -191,6 +198,10 @@ function Map({ slots, user, setScreen, setNavigation }) {
               <div className="w-full flex flex-row gap-2">
                 <p className="font-lato-bold text-base">Whole Price:</p>
                 <p>&#8369;{details["Whole Price"]}</p>
+              </div>
+              <div className="w-full flex flex-row gap-2">
+                <p className="font-lato-bold text-base">Installment:</p>
+                <p>&#8369;{details["Installment"]}</p>
               </div>
             </div>
             {!isSubmit ? (
