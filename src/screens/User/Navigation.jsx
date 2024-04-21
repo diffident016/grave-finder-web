@@ -81,7 +81,10 @@ function Navigation({ slots, navigate, setNavigate }) {
         [14.110811, 121.552335],
         [navigate.Latitude, navigate.Longitude],
       ],
-      lineOptions: { styles: [{ color: "#242c81", weight: 3 }] },
+      lineOptions: {
+        styles: [{ color: "#4F73DF", weight: 3 }],
+        missingRouteStyles: [{ color: "#4F73DF", weight: 3 }],
+      },
       altLineOptions: { styles: [{ color: "#ed6852", weight: 3 }] },
       createMarker: function (i, start, n) {
         var marker = L.marker(start.latLng, {
@@ -89,12 +92,8 @@ function Navigation({ slots, navigate, setNavigate }) {
         });
         return marker;
       },
-      show: false,
       addWaypoints: true,
-      routeWhileDragging: true,
       draggableWaypoints: false,
-      fitSelectedRoutes: true,
-      showAlternatives: true,
     });
 
     temp.addTo(map);
@@ -106,6 +105,10 @@ function Navigation({ slots, navigate, setNavigate }) {
     var newSlots = slots["slots"];
 
     newSlots = newSlots.filter((slot) => {
+      var name;
+
+      if (slot["Name"])
+        name = slot["Name"].toLowerCase().indexOf(query.toLowerCase());
       var block_name = slot["block_name"]
         .toLowerCase()
         .indexOf(query.toLowerCase());
@@ -117,7 +120,7 @@ function Navigation({ slots, navigate, setNavigate }) {
         .toLowerCase()
         .indexOf(query.toLowerCase());
 
-      return block_name !== -1 || lot_no !== -1 || street !== -1;
+      return name !== -1 || block_name !== -1 || lot_no !== -1 || street !== -1;
     });
 
     return newSlots;
@@ -207,6 +210,11 @@ function Navigation({ slots, navigate, setNavigate }) {
                         <p className="font-lato text-sm">
                           Status: {`${item["Status"]}`}
                         </p>
+                        {item["Status"] == "Occupied" && (
+                          <p className="font-lato text-sm">
+                            Name: {`${item["Name"]}`}
+                          </p>
+                        )}
                       </div>
                     );
                   })

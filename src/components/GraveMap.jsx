@@ -76,6 +76,10 @@ function GraveMap({ map, setMap, slots, showDetails }) {
     var newSlots = slots["slots"];
 
     newSlots = newSlots.filter((slot) => {
+      var name;
+
+      if (slot["Name"])
+        name = slot["Name"].toLowerCase().indexOf(query.toLowerCase());
       var block_name = slot["block_name"]
         .toLowerCase()
         .indexOf(query.toLowerCase());
@@ -87,7 +91,7 @@ function GraveMap({ map, setMap, slots, showDetails }) {
         .toLowerCase()
         .indexOf(query.toLowerCase());
 
-      return block_name !== -1 || lot_no !== -1 || street !== -1;
+      return name !== -1 || block_name !== -1 || lot_no !== -1 || street !== -1;
     });
 
     return newSlots;
@@ -144,6 +148,11 @@ function GraveMap({ map, setMap, slots, showDetails }) {
                       <p className="font-lato text-sm">
                         Status: {`${item["Status"]}`}
                       </p>
+                      {item["Status"] == "Occupied" && (
+                        <p className="font-lato text-sm">
+                          Name: {`${item["Name"]}`}
+                        </p>
+                      )}
                     </div>
                   );
                 })
