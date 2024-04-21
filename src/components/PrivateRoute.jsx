@@ -6,9 +6,10 @@ import Homepage from "../pages/Homepage";
 import AdminHomepage from "../pages/AdminHomepage";
 import AuthPage from "../pages/AuthPage";
 import { getUser } from "../api/Services";
+import VerifyEmail from "./VerifyEmail";
 
 function PrivateRoute() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout, sendVerification } = useAuth();
   const { pathname } = useLocation();
 
   const [isLoading, setLoading] = useState(true);
@@ -35,6 +36,12 @@ function PrivateRoute() {
         {pathname === "/" ? (
           isLoading ? (
             <Loader message="Loading, please wait..." />
+          ) : !user?.userType && !currentUser.emailVerified ? (
+            <VerifyEmail
+              currentUser={currentUser}
+              sendVerification={sendVerification}
+              logout={logout}
+            />
           ) : !user?.userType ? (
             <Homepage user={user} />
           ) : (

@@ -55,7 +55,7 @@ function SignIn({ setScreen }) {
   };
 
   return (
-    <div className="bg-white h-[450px] w-[80%] rounded-lg shadow-sm">
+    <div className="bg-white h-[450px] w-[400px] rounded-lg shadow-sm">
       {forgot ? (
         sent ? (
           <div className="flex flex-col items-center rounded-lg shadow-sm pt-10 w-[450px] h-[400px] justify-center px-8">
@@ -85,7 +85,7 @@ function SignIn({ setScreen }) {
             <div className="z-10 pt-4 flex flex-col w-[500px] h-full items-center">
               <form
                 onSubmit={handleReset}
-                className="flex flex-col z-10 w-[350px] py-2 font-lato-bold text-[#1F2F3D]"
+                className="flex flex-col z-10 w-full px-2 py-2 font-lato-bold text-[#1F2F3D]"
               >
                 <label className="py-2 text-sm">Email Address</label>
                 <input
@@ -184,11 +184,9 @@ function SignIn({ setScreen }) {
               className="mt-4 flex w-full h-10 bg-[#4F73DF] rounded-lg justify-center items-center"
             >
               {onLogin ? (
-                <div className="flex flex-row items-center gap-4">
+                <div className="flex flex-row items-center gap-4 text-white ">
                   <CircularProgress size="18px" color="inherit" />
-                  <p className="text-white text-sm">
-                    Logging in, please wait...
-                  </p>
+                  <p className="text-sm">Logging in, please wait...</p>
                 </div>
               ) : (
                 <p className="text-white">Sign In</p>

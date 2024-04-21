@@ -36,7 +36,7 @@ function SignUp({ setScreen }) {
   };
 
   return (
-    <div className="bg-white h-[560px] w-[80%] rounded-lg shadow-sm">
+    <div className="bg-white h-[560px] w-[400px] rounded-lg shadow-sm">
       <div className="flex flex-col px-4 py-6 items-center">
         <h1 className="font-lato-bold text-3xl">Welcome!</h1>
         <form

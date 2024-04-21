@@ -6,6 +6,7 @@ import {
   signOut,
   deleteUser,
   sendPasswordResetEmail,
+  sendEmailVerification,
 } from "firebase/auth";
 
 const AuthContext = React.createContext();
@@ -46,6 +47,17 @@ export function AuthProvider({ children }) {
     });
   }
 
+  async function sendVerification(user) {
+    setSignup(false);
+    return new Promise((resolve, reject) => {
+      sendEmailVerification(user)
+        .then((_) => {
+          resolve();
+        })
+        .catch((err) => reject(err));
+    });
+  }
+
   // function resetPassword(email) {
   //     return auth.sendPasswordResetEmail(email)
   // }
@@ -75,6 +87,7 @@ export function AuthProvider({ children }) {
     signup,
     deleteAcc,
     resetPassword,
+    sendVerification,
   };
 
   return (
