@@ -17,6 +17,7 @@ import {
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import DataTable from "react-data-table-component";
 
 function Reports({ reservations, slots }) {
   const [header, setHeader] = useState("");
@@ -109,6 +110,36 @@ function Reports({ reservations, slots }) {
     return temp;
   }, [filter]);
 
+  const columns = useMemo(() => [
+    {
+      name: "No.",
+      selector: (row) => row.no,
+      width: "60px",
+    },
+    {
+      name: "Name of the Deceased",
+      selector: (row) => row["Name"],
+      width: "250px",
+    },
+    {
+      name: "Born",
+      selector: (row) =>
+        !isValid(Date.parse(row.Born)) ? "" : format(row.Born, "MMMM dd, yyyy"),
+      width: "160px",
+    },
+    {
+      name: "Died",
+      selector: (row) =>
+        !isValid(Date.parse(row.Died)) ? "" : format(row.Died, "MMMM dd, yyyy"),
+      width: "160px",
+    },
+    {
+      name: "Street",
+      selector: (row) => `${row["block_name"]} - ${row["lot_no"]}`,
+      width: "200px",
+    },
+  ]);
+
   const generateReservation = (type) => {
     const doc = new jsPDF();
 
@@ -133,8 +164,6 @@ function Reports({ reservations, slots }) {
         head: [
           [
             "Name of Deceased",
-            "Born",
-            "Died",
             "Block Name",
             "Lot No.",
             "Reserved By",
@@ -143,8 +172,6 @@ function Reports({ reservations, slots }) {
         ],
         body: reservations["data"].map((item) => [
           item["Name"],
-          item["Born"],
-          item["Died"],
           item["block_name"],
           item["lot_no"],
           item["reservedBy"],
@@ -158,8 +185,8 @@ function Reports({ reservations, slots }) {
   };
 
   return (
-    <div className="w-full h-full p-4 overflow-hidden flex flex-col gap-4">
-      <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center">
+    <div className="w-full h-full p-4  flex flex-col gap-4 overflow-hidden">
+      <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center ">
         <h1 className="font-lato-bold text-xl">Reports</h1>
         {/* <h1
           onClick={() => {}}
@@ -168,139 +195,187 @@ function Reports({ reservations, slots }) {
           <span>{<PlusIcon className="w-5" />}</span> New
         </h1> */}
       </div>
+
       {reservations["fetchState"] == 0 ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-2">
           <CircularProgress />
           <p className="text-base">Fetching data...</p>
         </div>
       ) : (
-        <div className="flex flex-col w-full h-full bg-white border rounded-lg p-4">
-          <div className="h-12 w-full flex flex-row items-center justify-between">
-            <div className="flex flex-col">
-              <h1 className="font-lato-bold text-lg">Reservations</h1>
-              <p className="text-sm font-light">{header}</p>
-            </div>
-
-            <div className="flex flex-row gap-4">
-              <div className="flex flex-row w-[180px] h-8 border rounded-lg text-xs font-lato-bold">
-                <button
-                  onClick={() => {
-                    setFilter(0);
-                  }}
-                  className={`${
-                    filter == 0 && "bg-[#4F73DF] text-white"
-                  } flex-1  border-r rounded-l-lg`}
-                >
-                  Day
-                </button>
-                <button
-                  onClick={() => {
-                    setFilter(1);
-                  }}
-                  className={`${
-                    filter == 1 && "bg-[#4F73DF] text-white"
-                  } flex-1  border-r`}
-                >
-                  Month
-                </button>
-                <button
-                  onClick={() => {
-                    setFilter(2);
-                  }}
-                  className={` ${
-                    filter == 2 && "bg-[#4F73DF] text-white"
-                  } flex-1  border-r rounded-r-lg`}
-                >
-                  Year
-                </button>
+        <div className="flex flex-col h-full w-full overflow-auto gap-2">
+          <div className="flex flex-col w-full h-full bg-white border rounded-lg p-4">
+            <div className="h-12 w-full flex flex-row items-center justify-between">
+              <div className="flex flex-col">
+                <h1 className="font-lato-bold text-lg">Reservations</h1>
+                <p className="text-sm font-light">{header}</p>
               </div>
-              <button
-                onClick={() => {
-                  setPrint(true);
-                }}
-                title="Print reports"
-                className="bg-[#4F73DF] rounded-lg flex items-center justify-center w-8 h-8"
-              >
-                <Print className="w-4 h-4 text-white" fontSize="inherit" />
-              </button>
-            </div>
-          </div>
 
-          <ResponsiveContainer
-            width="100%"
-            height="80%"
-            className="text-sm py-2 mt-4"
-          >
-            <LineChart
-              width={450}
-              height={250}
-              data={data}
-              onClick={(e) => {}}
-              margin={{
-                top: 5,
-                right: 10,
-                left: 15,
-                bottom: 15,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <Tooltip />
-              <XAxis dataKey="name">
-                <Label
-                  value={
-                    ["Days of the Month", "Months of the Year", "Year"][filter]
-                  }
-                  offset={0}
-                  position="bottom"
-                />
-              </XAxis>
-              <YAxis>
-                <Label
-                  value="Reservations"
-                  angle={-90}
-                  offset={0}
-                  position="left"
-                />
-              </YAxis>
-
-              <Line type="monotone" dataKey="Reservations" stroke="#4F73DF" />
-            </LineChart>
-          </ResponsiveContainer>
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={isPrint}
-          >
-            {isPrint && (
-              <div className="w-[350px] h-[180px] bg-white/80 rounded-lg flex flex-col p-4 text-[#555C68]">
-                <div className="flex flex-row justify-between items-center">
-                  <h1 className="font-lato-bold text-lg">Print Reports</h1>
-                  <XMarkIcon
+              <div className="flex flex-row gap-4">
+                <div className="flex flex-row w-[180px] h-8 border rounded-lg text-xs font-lato-bold">
+                  <button
                     onClick={() => {
-                      setPrint(false);
+                      setFilter(0);
                     }}
-                    className="w-6 h-6 cursor-pointer"
-                  />
+                    className={`${
+                      filter == 0 && "bg-[#4F73DF] text-white"
+                    } flex-1  border-r rounded-l-lg`}
+                  >
+                    Day
+                  </button>
+                  <button
+                    onClick={() => {
+                      setFilter(1);
+                    }}
+                    className={`${
+                      filter == 1 && "bg-[#4F73DF] text-white"
+                    } flex-1  border-r`}
+                  >
+                    Month
+                  </button>
+                  <button
+                    onClick={() => {
+                      setFilter(2);
+                    }}
+                    className={` ${
+                      filter == 2 && "bg-[#4F73DF] text-white"
+                    } flex-1  border-r rounded-r-lg`}
+                  >
+                    Year
+                  </button>
                 </div>
-
                 <button
                   onClick={() => {
                     generateReservation();
                   }}
-                  className="mt-3 h-10 border rounded-lg font-lato-bold border-[#4F73DF] text-[#4F73DF]"
+                  title="Print reservation report"
+                  className="hover:bg-[#4F73DF] hover:text-white border text-[#4F73DF]  border-[#4F73DF] rounded-lg flex items-center justify-center w-40 h-8 gap-2"
                 >
-                  Reservation Reports
-                </button>
-                <button
-                  onClick={() => {
-                    generateReservation(0);
-                  }}
-                  className="mt-3 h-10 border rounded-lg font-lato-bold border-[#4F73DF] text-[#4F73DF]"
-                >
-                  Buried Reports
+                  <Print className="w-4 h-4 " fontSize="inherit" />
+                  <p className="text-xs font-lato-bold">Reservation Report</p>
                 </button>
               </div>
-            )}
-          </Backdrop>
+            </div>
+
+            <ResponsiveContainer
+              width="100%"
+              height="80%"
+              className="text-sm py-2 mt-4"
+            >
+              <LineChart
+                width={450}
+                height={250}
+                data={data}
+                onClick={(e) => {}}
+                margin={{
+                  top: 5,
+                  right: 10,
+                  left: 15,
+                  bottom: 15,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <XAxis dataKey="name">
+                  <Label
+                    value={
+                      ["Days of the Month", "Months of the Year", "Year"][
+                        filter
+                      ]
+                    }
+                    offset={0}
+                    position="bottom"
+                  />
+                </XAxis>
+                <YAxis>
+                  <Label
+                    value="Reservations"
+                    angle={-90}
+                    offset={0}
+                    position="left"
+                  />
+                </YAxis>
+
+                <Line type="monotone" dataKey="Reservations" stroke="#4F73DF" />
+              </LineChart>
+            </ResponsiveContainer>
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={isPrint}
+            >
+              {isPrint && (
+                <div className="w-[350px] h-[180px] bg-white/80 rounded-lg flex flex-col p-4 text-[#555C68]">
+                  <div className="flex flex-row justify-between items-center">
+                    <h1 className="font-lato-bold text-lg">Print Reports</h1>
+                    <XMarkIcon
+                      onClick={() => {
+                        setPrint(false);
+                      }}
+                      className="w-6 h-6 cursor-pointer"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      generateReservation();
+                    }}
+                    className="mt-3 h-10 border rounded-lg font-lato-bold border-[#4F73DF] text-[#4F73DF]"
+                  >
+                    Reservation Reports
+                  </button>
+                  <button
+                    onClick={() => {
+                      generateReservation(0);
+                    }}
+                    className="mt-3 h-10 border rounded-lg font-lato-bold border-[#4F73DF] text-[#4F73DF]"
+                  >
+                    Buried Reports
+                  </button>
+                </div>
+              )}
+            </Backdrop>
+          </div>
+          <div className="w-full h-full flex flex-col  bg-white border rounded-lg p-2">
+            <div className="w-full h-16 px-4 py-4 flex flex-row justify-between items-center">
+              <h1 className="font-lato-bold text-xl">List of Buried</h1>
+              <button
+                onClick={() => {
+                  generateReservation(0);
+                }}
+                title="Print reservation report"
+                className="hover:bg-[#4F73DF] hover:text-white border text-[#4F73DF]  border-[#4F73DF] rounded-lg flex items-center justify-center w-40 h-8 gap-2"
+              >
+                <Print className="w-4 h-4 " fontSize="inherit" />
+                <p className="text-xs font-lato-bold">Buried Report</p>
+              </button>
+            </div>
+
+            <DataTable
+              className="font-roboto  h-full overflow-hidden rounded-lg"
+              columns={columns}
+              data={slots["groupSlots"]["Occupied"]}
+              customStyles={{
+                rows: {
+                  style: {
+                    color: "#607d8b",
+                    "font-family": "Lato",
+                    "font-size": "14px",
+                  },
+                },
+                headCells: {
+                  style: {
+                    color: "#607d8b",
+                    "font-family": "Lato-Bold",
+                    "font-size": "14px",
+                    "font-weight": "bold",
+                  },
+                },
+              }}
+              persistTableHead
+              pagination={true}
+              fixedHeader
+              allowOverflow
+            />
+          </div>
         </div>
       )}
     </div>

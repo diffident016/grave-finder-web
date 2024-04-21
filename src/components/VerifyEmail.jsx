@@ -2,14 +2,22 @@ import React, { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { Alert, Box, CircularProgress } from "@mui/material";
+import Loader from "./Loader";
 
 function VerifyEmail({ currentUser, sendVerification, logout }) {
   const navigate = useNavigate();
   const [isSent, setSent] = useState(false);
   const [count, setCount] = useState(60);
   const [showBanner, setBanner] = useState(false);
+  const [load, setLoad] = useState(true);
   var timer,
     c = 60;
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoad(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     if (currentUser.emailVerified) {
@@ -35,7 +43,9 @@ function VerifyEmail({ currentUser, sendVerification, logout }) {
     }
   };
 
-  return (
+  return load ? (
+    <Loader message="Loading, please wait..." />
+  ) : (
     <div className="w-full h-screen flex items-center justify-center font-lato text-[#1F2F3D] flex-col gap-2">
       {showBanner && (
         <Alert

@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import { getTransactionNo } from "../../api/Services";
 import { format } from "date-fns";
 
-function ReservationForm({ user, showReserve, showSubmit }) {
+function ReservationForm({ user, showReserve, showSubmit, details }) {
   const [form, updateForm] = useReducer(
     (prev, next) => {
       return { ...prev, ...next };
@@ -15,6 +15,8 @@ function ReservationForm({ user, showReserve, showSubmit }) {
       Died: "",
       transaction: "",
       reservedBy: `${user["fname"]} ${user["lname"]}`,
+      block_name: details["block_name"],
+      lot_no: details["lot_no"],
     }
   );
 

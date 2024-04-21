@@ -30,12 +30,16 @@ function Map({ slots, user, setScreen, setNavigation }) {
   const handleReserve = () => {
     setReserving(true);
 
-    const { firstname, lastname, Born, Died } = isSubmit;
+    const { firstname, lastname, Born, Died, block_name, lot_no, reservedBy } =
+      isSubmit;
 
     const form = {
       Name: firstname + " " + lastname,
       Born: Born,
       Died: Died,
+      block_name: block_name,
+      lot_no: lot_no,
+      reservedBy: reservedBy,
     };
 
     reservedLot(details.id, form)
@@ -83,6 +87,10 @@ function Map({ slots, user, setScreen, setNavigation }) {
         ],
         { color: statusColor(item["Status"]) }
       ).addEventListener("click", async () => {
+        // if (item["Status"] == "Reserved") {
+        //   deleteReservation(item["id"]);
+        //   return;
+        // }
         if (item["Status"] != "Available") {
           return window.alert("This lot is not available.");
         }
@@ -104,6 +112,7 @@ function Map({ slots, user, setScreen, setNavigation }) {
           user={user}
           showReserve={showReserve}
           showSubmit={showSubmit}
+          details={details}
         />
       ) : (
         <GraveMap

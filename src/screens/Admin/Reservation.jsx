@@ -28,21 +28,15 @@ function Reservation({ slots }) {
       selector: (row) => row.Name,
       width: "250px",
     },
-    {
-      name: "Born",
-      selector: (row) =>
-        !isValid(Date.parse(row.Born)) ? "" : format(row.Born, "	MMMM dd, yyyy"),
-      width: "150px",
-    },
-    {
-      name: "Died",
-      selector: (row) =>
-        !isValid(Date.parse(row.Died)) ? "" : format(row.Died, "	MMMM dd, yyyy"),
-      width: "150px",
-    },
+
     {
       name: "Block Name",
       selector: (row) => row["block_name"],
+      width: "200px",
+    },
+    {
+      name: "Date Reserved",
+      selector: (row) => format(row.updatedAt.toDate(), "MMMM dd, yyyy"),
       width: "200px",
     },
     {
@@ -224,7 +218,7 @@ function Reservation({ slots }) {
           open={view}
         >
           {view && (
-            <div className="w-[350px] h-[280px] bg-white rounded-lg flex flex-col p-4 text-[#555C68]">
+            <div className="w-[360px] h-[300px] bg-white rounded-lg flex flex-col p-4 text-[#555C68]">
               <div className="flex flex-row justify-between items-center">
                 <h1 className="font-lato-bold text-lg">Reservation Details</h1>
                 <XMarkIcon
@@ -235,6 +229,10 @@ function Reservation({ slots }) {
                 />
               </div>
               <div className="w-full flex flex-col gap-1 py-2 px-1">
+                <div className="w-full flex flex-row gap-2">
+                  <p className="font-lato-bold text-base">Date Reserved:</p>
+                  <p>{format(view.updatedAt.toDate(), "MMMM dd, yyyy")}</p>
+                </div>
                 <div className="w-full flex flex-row gap-2">
                   <p className="font-lato-bold text-base">Block Name:</p>
                   <p>{view["block_name"]}</p>

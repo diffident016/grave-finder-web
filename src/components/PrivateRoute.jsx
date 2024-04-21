@@ -16,14 +16,17 @@ function PrivateRoute() {
   const [user, setUser] = useState(null);
 
   const getUserProfile = async () => {
-    getUser(currentUser.uid).then((value) => {
-      if (value.data() != null) {
-        const userProfile = value.data();
-        setUser(userProfile);
-      }
-
-      setLoading(false);
-    });
+    getUser(currentUser.uid)
+      .then((value) => {
+        if (value.data() != null) {
+          const userProfile = value.data();
+          setUser(userProfile);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        logout();
+      });
   };
 
   if (currentUser != null) {
@@ -36,14 +39,16 @@ function PrivateRoute() {
         {pathname === "/" ? (
           isLoading ? (
             <Loader message="Loading, please wait..." />
-          ) : !user?.userType && !currentUser.emailVerified ? (
-            <VerifyEmail
-              currentUser={currentUser}
-              sendVerification={sendVerification}
-              logout={logout}
-            />
           ) : !user?.userType ? (
-            <Homepage user={user} />
+            !currentUser.emailVerified ? (
+              <VerifyEmail
+                currentUser={currentUser}
+                sendVerification={sendVerification}
+                logout={logout}
+              />
+            ) : (
+              <Homepage user={user} />
+            )
           ) : (
             <AdminHomepage user={user} />
           )
