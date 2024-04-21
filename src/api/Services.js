@@ -16,8 +16,10 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-import { db, storage, auth } from "../../firebase";
+import { db } from "../../firebase";
 import { format } from "date-fns";
+
+const BASEURL = import.meta.env.VITE_BASE_URL;
 
 const getUser = (userId) => {
   return getDoc(doc(db, "Users", userId));
@@ -162,6 +164,28 @@ const getReservations = () => {
   return rRef;
 };
 
+const deleteUserData = (id) => {
+  return deleteDoc(doc(db, "Users", id));
+};
+
+const deleteUserAccount = (id) => {
+  return Promise.all([
+    deleteUserData(id.uid),
+    fetch(`${BASEURL}/api/delete`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(id),
+    }),
+  ]);
+};
+
+const pingServer = async () => {
+  return fetch(`${BASEURL}/ping`);
+};
+
 export {
   getUser,
   getUsers,
@@ -179,4 +203,6 @@ export {
   updateAvailableLots,
   addReservation,
   getReservations,
+  deleteUserAccount,
+  pingServer,
 };

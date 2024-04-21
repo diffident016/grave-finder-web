@@ -188,12 +188,6 @@ function Reports({ reservations, slots }) {
     <div className="w-full h-full p-4  flex flex-col gap-4 overflow-hidden">
       <div className="w-full bg-white border rounded-lg px-4 py-4 flex flex-row justify-between items-center ">
         <h1 className="font-lato-bold text-xl">Reports</h1>
-        {/* <h1
-          onClick={() => {}}
-          className="px-2 cursor-pointer flex gap-1 font-lato-bold text-sm text-white w-24 shadow-sm py-2 rounded-lg justify-center bg-[#4F73DF]"
-        >
-          <span>{<PlusIcon className="w-5" />}</span> New
-        </h1> */}
       </div>
 
       {reservations["fetchState"] == 0 ? (
@@ -203,7 +197,7 @@ function Reports({ reservations, slots }) {
         </div>
       ) : (
         <div className="flex flex-col h-full w-full overflow-auto gap-2">
-          <div className="flex flex-col w-full h-full bg-white border rounded-lg p-4">
+          <div className="flex flex-col w-full h-[400px] bg-white border rounded-lg p-4">
             <div className="h-12 w-full flex flex-row items-center justify-between">
               <div className="flex flex-col">
                 <h1 className="font-lato-bold text-lg">Reservations</h1>
@@ -256,48 +250,54 @@ function Reports({ reservations, slots }) {
               </div>
             </div>
 
-            <ResponsiveContainer
-              width="100%"
-              height="80%"
-              className="text-sm py-2 mt-4"
-            >
-              <LineChart
-                width={450}
-                height={250}
-                data={data}
-                onClick={(e) => {}}
-                margin={{
-                  top: 5,
-                  right: 10,
-                  left: 15,
-                  bottom: 15,
-                }}
+            <div className="w-full h-[500px]">
+              <ResponsiveContainer
+                width="100%"
+                height="90%"
+                className="text-sm py-2 mt-4 h-full"
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip />
-                <XAxis dataKey="name">
-                  <Label
-                    value={
-                      ["Days of the Month", "Months of the Year", "Year"][
-                        filter
-                      ]
-                    }
-                    offset={0}
-                    position="bottom"
-                  />
-                </XAxis>
-                <YAxis>
-                  <Label
-                    value="Reservations"
-                    angle={-90}
-                    offset={0}
-                    position="left"
-                  />
-                </YAxis>
+                <LineChart
+                  width={450}
+                  height={250}
+                  data={data}
+                  onClick={(e) => {}}
+                  margin={{
+                    top: 5,
+                    right: 10,
+                    left: 15,
+                    bottom: 15,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip />
+                  <XAxis dataKey="name">
+                    <Label
+                      value={
+                        ["Days of the Month", "Months of the Year", "Year"][
+                          filter
+                        ]
+                      }
+                      offset={0}
+                      position="bottom"
+                    />
+                  </XAxis>
+                  <YAxis>
+                    <Label
+                      value="Reservations"
+                      angle={-90}
+                      offset={0}
+                      position="left"
+                    />
+                  </YAxis>
 
-                <Line type="monotone" dataKey="Reservations" stroke="#4F73DF" />
-              </LineChart>
-            </ResponsiveContainer>
+                  <Line
+                    type="monotone"
+                    dataKey="Reservations"
+                    stroke="#4F73DF"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
             <Backdrop
               sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={isPrint}

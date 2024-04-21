@@ -8,12 +8,14 @@ import AddReservation from "./AddReservation";
 import { show } from "../../states/alerts";
 import { useDispatch } from "react-redux";
 import { approveReservation, deleteReservation } from "../../api/Services";
+import PopupDialog from "../../components/PopupDialog";
 
 function Reservation({ slots }) {
   const [searchItems, setSearchItems] = useState(null);
   const [query, setQuery] = useState("");
   const [isAdd, setAdd] = useState(false);
   const [view, setView] = useState(null);
+  const [showDialog, setShowDialog] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -55,7 +57,7 @@ function Reservation({ slots }) {
             </div>
             <div
               onClick={() => {
-                handleDelete(row.id);
+                setShowDialog(row.id);
               }}
               className="cursor-pointer flex-1 flex flex-row h-full items-center text-sm gap-1"
             >
@@ -212,6 +214,21 @@ function Reservation({ slots }) {
           pagination
           fixedHeader
           allowOverflow
+        />
+        <PopupDialog
+          show={!!showDialog}
+          close={() => {
+            setShowDialog(null);
+          }}
+          title="Delete Reservation"
+          content="Are you sure you want to delete this reservation?"
+          action1={() => {
+            handleDelete(showDialog);
+            setShowDialog(null);
+          }}
+          action2={() => {
+            setShowDialog(null);
+          }}
         />
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
