@@ -74,7 +74,9 @@ function ManageUsers({ users }) {
       .then((res) => res.json())
       .then((val) => {
         if (!val) {
-          return handleDelete(user);
+          return setTimeout(() => {
+            handleDelete(user);
+          }, 5000);
         }
         setStatus("Deleting user, please wait...");
         deleteUserAccount({ uid: user.id })
@@ -103,7 +105,9 @@ function ManageUsers({ users }) {
       })
       .catch((err) => {
         console.log(err);
-        handleDelete(user);
+        setTimeout(() => {
+          handleDelete(user);
+        }, 5000);
       });
   };
 
