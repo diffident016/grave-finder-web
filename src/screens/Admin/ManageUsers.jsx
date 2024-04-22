@@ -53,6 +53,17 @@ function ManageUsers({ users }) {
             </div>
             <div
               onClick={() => {
+                if (row["userType"]) {
+                  dispatch(
+                    show({
+                      type: "error",
+                      message: "Oops, you can't delete admin user.",
+                      duration: 3000,
+                      show: true,
+                    })
+                  );
+                  return;
+                }
                 setShowDialog(row);
               }}
               className="cursor-pointer flex-1 flex flex-row h-full items-center text-sm gap-1"
