@@ -2,11 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
   TileLayer,
+  ImageOverlay,
   useMap,
   Marker,
   Popup,
   Polygon,
   Polyline,
+  useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import RoutingMachine from "./RoutingMachine";
@@ -16,6 +18,7 @@ import { Search } from "@mui/icons-material";
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+import { LatLngBounds } from "leaflet";
 
 const iconDefault = L.icon({
   iconRetinaUrl,
@@ -33,6 +36,8 @@ function GraveMap({ map, setMap, slots, showDetails }) {
   const [searchItem, setSearchItems] = useState(null);
   const [myMarker, setMarker] = useState(null);
   const [slot, setSlot] = useState(null);
+
+  const bounds = new LatLngBounds([14.113020, 121.546115], [14.10877463053821, 121.55438662251981])
 
   const statusColor = (status) => {
     if (status == "Available") {
@@ -52,21 +57,27 @@ function GraveMap({ map, setMap, slots, showDetails }) {
         center={[14.110906767590265, 121.55069557584935]}
         zoom={18}
         maxBounds={[
-          [14.111812009494454, 121.54861954598962],
-          [14.109991116967368, 121.54863027482598],
-          [14.111884844893801, 121.55188647669641],
-          [14.110032737531318, 121.55190793436911],
+          [14.112046428091196, 121.54880443853448],
+          [14.109809973697436, 121.54879907320274],
+          [14.112046428091196, 121.55173927499862],
+          [14.109851582351608, 121.55173659233277],
         ]}
         maxBoundsViscosity={1}
       >
+        <ImageOverlay
+          url="/map2.svg"
+          bounds={bounds}
+          zIndex={10}
+        />
         <TileLayer
           maxZoom={19.8}
-          minZoom={18}
+          minZoom={19}
+          opacity={0}
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* <RoutingMachine className="absolute left-0" /> */}
+        
       </MapContainer>
     ),
     []

@@ -13,6 +13,7 @@ import {
   Popup,
   Polygon,
   Polyline,
+  useMapEvents,
 } from "react-leaflet";
 import { polygon } from "leaflet";
 import { format } from "date-fns";
@@ -85,7 +86,7 @@ function Map({ slots, user, setScreen, setNavigation }) {
           item["lat_long3"].split(",").map((val) => parseFloat(val)),
           item["lat_long4"].split(",").map((val) => parseFloat(val)),
         ],
-        { color: statusColor(item["Status"]) }
+        { color: statusColor(item["Status"]), weight: 1 }
       ).addEventListener("click", async () => {
         // if (item["Status"] == "Reserved") {
         //   deleteReservation(item["id"]);
@@ -102,7 +103,24 @@ function Map({ slots, user, setScreen, setNavigation }) {
       temp.addTo(map);
     });
 
+    // var imageUrl = '/map2.svg',
+    //   imageBounds = [
+    //     [14.113166870421994, 121.54612357334524],
+    //     [14.10877463053821, 121.55438662251981]
+    //   ];
+
+    // L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
     setPolygons(newPoly);
+
+    map.on('click', function(e){
+      var coord = e.latlng;
+      var lat = coord.lat;
+      var lng = coord.lng;
+      console.log(lat, lng);
+      });
+
+
   }, [slots["slots"], map]);
 
   return (

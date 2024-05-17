@@ -15,7 +15,7 @@ function Sidebar({ screens, screen, setScreen }) {
           {screens.map((item, index) => {
             return (
               <div
-                id={item.label}
+                key={item.label}
                 onClick={() => {
                   setScreen(index);
                 }}

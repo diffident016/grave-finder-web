@@ -1,9 +1,10 @@
-<svg width="4692" height="2436" viewBox="0 0 4692 2436" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<mask id="mask0_16_8" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1176" y="-1" width="2484" height="2437">
-<rect x="1176" y="25.6599" width="2458.22" height="2410.08" transform="rotate(-0.59809 1176 25.6599)" fill="url(#pattern0_16_8)"/>
+<svg width="3598" height="2869" viewBox="0 0 1098 869" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path d="M0 0H1098V869H0V0Z" fill="#D9D9D9" fill-opacity="1"/>
+<mask id="mask0_16_8" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="291" y="147" width="3953" height="2976">
+<rect width="550.525" height="572.799" transform="matrix(0.999991 -0.00430074 0.00312234 0.999995 291 149.368)" fill="url(#pattern0_16_8)"/>
 </mask>
 <g mask="url(#mask0_16_8)">
-<path d="M1332.5 1541C1306.67 1575.33 1253.6 1646.1 1248 1654.5L1192.5 1685L1442.5 1911L1522 1808L1871.5 1750.5L1929 1965.5L2564.5 1769.5L2608.5 1952L3546.5 1391L2977 686L2933 551L2647.5 272L2106.5 703L2362 958L1777 1391L1762 1357L1583 1391L1332.5 1541Z" fill="#CC6E00" stroke="black"/>
+<path d="M325.481 504.459C319.64 512.579 307.643 529.318 306.375 531.306L293.897 538.471L349.522 592.56L367.491 568.201L445.852 555.063L458.384 606.248L601.016 560.625L610.578 604.066L821.538 472.153L695.131 303.739L685.494 271.588L622.004 204.849L500.158 306.465L556.968 367.455L425.265 469.48L421.961 461.377L381.82 469.187L325.481 504.459Z" fill="#CC6E00" stroke="black"/>
 </g>
 <defs>
 <pattern id="pattern0_16_8" patternContentUnits="objectBoundingBox" width="1" height="1">

@@ -3,10 +3,12 @@ import { Search } from "@mui/icons-material";
 import { Backdrop } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import "leaflet/dist/images/marker-shadow.png";
+import { LatLngBounds } from "leaflet";
 
 import {
   MapContainer,
   TileLayer,
+  ImageOverlay,
   useMap,
   Marker,
   Popup,
@@ -37,6 +39,8 @@ function Navigation({ slots, navigate, setNavigate }) {
   const [route, setRoute] = useState(null);
   const [polygons, setPolygons] = useState([]);
 
+  const bounds = new LatLngBounds([14.113020, 121.546115], [14.10877463053821, 121.55438662251981])
+
   const initialMap = useMemo(
     () => (
       <MapContainer
@@ -44,17 +48,22 @@ function Navigation({ slots, navigate, setNavigate }) {
         className="h-full z-0"
         center={[14.110906767590265, 121.55069557584935]}
         zoom={18}
-        // maxBounds={[
-        //   [14.111812009494454, 121.54861954598962],
-        //   [14.109991116967368, 121.54863027482598],
-        //   [14.111884844893801, 121.55188647669641],
-        //   [14.110032737531318, 121.55190793436911],
-        // ]}
-        // maxBoundsViscosity={1}
+        maxBounds={[
+          [14.112046428091196, 121.54880443853448],
+          [14.109809973697436, 121.54879907320274],
+          [14.112046428091196, 121.55173927499862],
+          [14.109851582351608, 121.55173659233277],
+        ]}
+        maxBoundsViscosity={1}
       >
+       <ImageOverlay
+          url="/map2.svg"
+          bounds={bounds}
+          zIndex={10}
+        />
         <TileLayer
           maxZoom={19.8}
-          minZoom={18}
+          minZoom={19}
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
@@ -78,7 +87,7 @@ function Navigation({ slots, navigate, setNavigate }) {
 
     const temp = L.Routing.control({
       waypoints: [
-        [14.110811, 121.552335],
+        [14.110771, 121.551519],
         [navigate.Latitude, navigate.Longitude],
       ],
       lineOptions: {
@@ -157,7 +166,7 @@ function Navigation({ slots, navigate, setNavigate }) {
           item["lat_long3"].split(",").map((val) => parseFloat(val)),
           item["lat_long4"].split(",").map((val) => parseFloat(val)),
         ],
-        { color: statusColor(item["Status"]) }
+        { color: statusColor(item["Status"]),  weight: 1 }
       ).addEventListener("click", async () => {
         setNavigate(item);
       });
