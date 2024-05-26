@@ -37,7 +37,7 @@ function GraveMap({ map, setMap, slots, showDetails }) {
   const [myMarker, setMarker] = useState(null);
   const [slot, setSlot] = useState(null);
 
-  const bounds = new LatLngBounds([14.113020, 121.546115], [14.10877463053821, 121.55438662251981])
+  const bounds = new LatLngBounds([14.11226, 121.5461], [14.10961, 121.55445]);
 
   const statusColor = (status) => {
     if (status == "Available") {
@@ -64,20 +64,14 @@ function GraveMap({ map, setMap, slots, showDetails }) {
         ]}
         maxBoundsViscosity={1}
       >
-        <ImageOverlay
-          url="/map2.svg"
-          bounds={bounds}
-          zIndex={10}
-        />
+        <ImageOverlay url="/filled_map.svg" bounds={bounds} zIndex={10} />
         <TileLayer
           maxZoom={19.8}
-          minZoom={19}
+          minZoom={18.4}
           opacity={0}
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
-        
       </MapContainer>
     ),
     []

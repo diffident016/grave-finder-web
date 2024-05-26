@@ -39,7 +39,7 @@ function Navigation({ slots, navigate, setNavigate }) {
   const [route, setRoute] = useState(null);
   const [polygons, setPolygons] = useState([]);
 
-  const bounds = new LatLngBounds([14.113020, 121.546115], [14.10877463053821, 121.55438662251981])
+  const bounds = new LatLngBounds([14.11226, 121.5461], [14.10961, 121.55445]);
 
   const initialMap = useMemo(
     () => (
@@ -56,14 +56,10 @@ function Navigation({ slots, navigate, setNavigate }) {
         ]}
         maxBoundsViscosity={1}
       >
-       <ImageOverlay
-          url="/map2.svg"
-          bounds={bounds}
-          zIndex={10}
-        />
+        <ImageOverlay url="/filled_map.svg" bounds={bounds} zIndex={10} />
         <TileLayer
           maxZoom={19.8}
-          minZoom={19}
+          minZoom={18.4}
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
@@ -166,7 +162,7 @@ function Navigation({ slots, navigate, setNavigate }) {
           item["lat_long3"].split(",").map((val) => parseFloat(val)),
           item["lat_long4"].split(",").map((val) => parseFloat(val)),
         ],
-        { color: statusColor(item["Status"]),  weight: 1 }
+        { color: statusColor(item["Status"]), weight: 1 }
       ).addEventListener("click", async () => {
         setNavigate(item);
       });
