@@ -108,7 +108,7 @@ function Homepage({ user }) {
 
         setSlots({
           fetchState: 1,
-          slots: data,
+          slots: data.filter((item) => item["Status"] != "Draft"),
           count: data.length,
           groupSlots: group,
         });

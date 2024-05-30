@@ -17,3 +17,11 @@
       @apply bg-[#F1F2F5];
   }
 }
+
+.leaflet-grab {
+  cursor: auto;
+}
+
+.leaflet-dragging .leaflet-grab{
+  cursor:  move !important;
+}

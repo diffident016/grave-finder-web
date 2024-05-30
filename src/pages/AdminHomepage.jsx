@@ -11,6 +11,7 @@ import {
   ChartPieIcon,
   TagIcon,
   UsersIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
@@ -25,6 +26,7 @@ import {
   getUsers,
   onSnapshot,
 } from "../api/Services";
+import Utility from "../screens/Admin/Utility";
 
 function AdminHomepage({ user }) {
   const [screen, setScreen] = useState(0);
@@ -266,7 +268,14 @@ function AdminHomepage({ user }) {
       icon: <TagIcon />,
       header: "",
     },
+    {
+      label: "Utility",
+      component: <Utility slots={slots} />,
+      icon: <WrenchScrewdriverIcon />,
+      header: "",
+    },
   ];
+
   return (
     <div className="w-full h-screen flex flex-row font-lato text-[#555C68]">
       <Sidebar screens={screens} screen={screen} setScreen={setScreen} />

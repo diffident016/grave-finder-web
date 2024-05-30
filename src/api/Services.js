@@ -186,6 +186,59 @@ const pingServer = async () => {
   return fetch(`${BASEURL}/ping`);
 };
 
+const updateCoor = async (docId, coor, center) => {
+  const docRef = doc(db, "Slots", docId);
+
+  return updateDoc(docRef, {
+    Latitude: String(center[0]),
+    Longitude: String(center[1]),
+    lat_long1: String(coor[0]),
+    lat_long2: String(coor[1]),
+    lat_long3: String(coor[2]),
+    lat_long4: String(coor[3]),
+    updatedAt: Timestamp.now(),
+  });
+};
+
+const addSlot = async (coor, center) => {
+  const slotsRef = collection(db, "Slots");
+
+  const slot = {
+    Born: null,
+    Died: null,
+    Installment: null,
+    "Lot Size": null,
+    Name: null,
+    "Price Per SQM": null,
+    Status: "Draft",
+    "Whole Price": null,
+    block_name: null,
+    capacity: null,
+    lot_no: null,
+    Latitude: String(center[0]),
+    Longitude: String(center[1]),
+    lat_long1: String(coor[0]),
+    lat_long2: String(coor[1]),
+    lat_long3: String(coor[2]),
+    lat_long4: String(coor[3]),
+    updatedAt: Timestamp.now(),
+  };
+
+  return setDoc(doc(slotsRef), slot);
+};
+
+const updateSlot = (docId, form) => {
+  const docRef = doc(db, "Slots", docId);
+  var temp = form;
+  temp["updatedAt"] = Timestamp.now();
+
+  return updateDoc(docRef, temp);
+};
+
+const deleteSlot = (docId) => {
+  return deleteDoc(doc(db, "Slots", docId));
+};
+
 export {
   getUser,
   getUsers,
@@ -205,4 +258,8 @@ export {
   getReservations,
   deleteUserAccount,
   pingServer,
+  updateCoor,
+  addSlot,
+  updateSlot,
+  deleteSlot,
 };

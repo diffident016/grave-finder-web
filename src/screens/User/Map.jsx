@@ -113,14 +113,12 @@ function Map({ slots, user, setScreen, setNavigation }) {
 
     setPolygons(newPoly);
 
-    map.on('click', function(e){
+    map.on("click", function (e) {
       var coord = e.latlng;
       var lat = coord.lat;
       var lng = coord.lng;
       console.log(lat, lng);
-      });
-
-
+    });
   }, [slots["slots"], map]);
 
   return (
