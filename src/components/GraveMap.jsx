@@ -166,20 +166,20 @@ function GraveMap({ map, setMap, slots, showDetails }) {
           </div>
         )}
       </div>
-      <div className="absolute select-none z-10 w-[180px] h-[150px] bg-white/60 shadow-lg rounded-lg bottom-10 left-10">
-        <div className="flex flex-col p-4">
-          <h1 className="font-lato-bold text-lg pb-2">LEGEND</h1>
-          <div className="grid grid-rows-3 w-full gap-2">
+      <div className="absolute select-none z-10 lg:w-[180px] w-[150px] lg:h-[150px] h-[120px] bg-white/60 shadow-lg rounded-lg bottom-10 left-10">
+        <div className="flex flex-col lg:p-4 p-2">
+          <h1 className="font-lato-bold lg:text-lg pb-2">LEGEND</h1>
+          <div className="grid grid-rows-3 w-full lg:gap-2 gap-1">
             <div className="flex flex-row gap-2 items-center">
-              <div className="w-10 h-5 bg-[#00FF0A]" />
+              <div className="lg:w-10 w-5 h-3 lg:h-5 bg-[#00FF0A]" />
               <p className="font-lato-bold text-xs">AVAILABLE</p>
             </div>
             <div className="flex flex-row gap-2 items-center">
-              <div className="w-10 h-5 bg-[#ffe600ef]" />
+              <div className="lg:w-10 w-5 h-3 lg:h-5 bg-[#ffe600ef]" />
               <p className="font-lato-bold text-xs">PRE-RESERVED</p>
             </div>
             <div className="flex flex-row gap-2 items-center">
-              <div className="w-10 h-5 bg-[#FF0505]" />
+              <div className="lg:w-10 w-5 h-3 lg:h-5 bg-[#FF0505]" />
               <p className="font-lato-bold text-xs">OCCUPIED</p>
             </div>
           </div>

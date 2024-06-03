@@ -13,11 +13,11 @@ function AuthPage() {
 
   return (
     <div className="w-full h-screen bg-[#f1ecec] text-[#1F2F3D]">
-      <div className="w-full h-full flex flex-row items-center">
-        <div className="flex-1 flex items-center justify-center">
-          <img src={banner} className="w-[550px]" />
+      <div className="w-full h-full flex flex-row justify-center items-center">
+        <div className="lg:flex flex-1 hidden items-center justify-center">
+          <img src={banner} className=" w-[550px]" />
         </div>
-        <div className="w-[40%] h-full flex items-center">{screens[index]}</div>
+        <div className="lg:w-[40%] h-full flex items-center">{screens[index]}</div>
       </div>
     </div>
   );
