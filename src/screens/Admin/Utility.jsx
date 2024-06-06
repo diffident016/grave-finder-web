@@ -49,7 +49,7 @@ function Utility({ slots }) {
         ]}
         maxBoundsViscosity={1}
       >
-        <ImageOverlay url="/filled_map.svg" bounds={bounds} zIndex={10} />
+        <ImageOverlay url="/filled_map_label.svg" bounds={bounds} zIndex={10} />
         <TileLayer
           maxZoom={19.8}
           minZoom={18.4}
