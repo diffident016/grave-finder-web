@@ -83,11 +83,14 @@ function GraveMap({ map, setMap, slots, showDetails }) {
     newSlots = newSlots.filter((slot) => {
       var name;
 
-      if (slot["Name"])
+      if (slot["Name"]) {
         name = slot["Name"].toLowerCase().indexOf(query.toLowerCase());
+      }
+
       var block_name = slot["block_name"]
         .toLowerCase()
         .indexOf(query.toLowerCase());
+
       var lot_no = slot["lot_no"]
         .toString()
         .toLowerCase()
@@ -99,7 +102,15 @@ function GraveMap({ map, setMap, slots, showDetails }) {
       return name !== -1 || block_name !== -1 || lot_no !== -1 || street !== -1;
     });
 
-    return newSlots;
+    var filter = [];
+
+    newSlots.map((item) => {
+      if (item["Name"]) {
+        filter.push(item);
+      }
+    });
+
+    return filter.length > 0 ? filter : newSlots;
   };
 
   const handleClick = () => {
@@ -133,7 +144,7 @@ function GraveMap({ map, setMap, slots, showDetails }) {
         </div>
 
         {searchItem && (
-          <div className="w-full h-min max-h-[350px] bg-white overflow-hidden  rounded-lg mt-2">
+          <div className="w-full h-min max-h-[350px] bg-white overflow-auto rounded-lg mt-2">
             <div className="w-full h-full flex flex-col overflow-auto p-4">
               {searchItem.length < 1 ? (
                 <p>No results</p>
