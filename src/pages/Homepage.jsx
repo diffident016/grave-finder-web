@@ -125,7 +125,7 @@ function Homepage({ user }) {
   const screens = [
     {
       label: "Dashboard",
-      component: <Dashboard lots={lots} />,
+      component: <Dashboard slots={slots} />,
       icon: <Squares2X2Icon />,
       header: "",
     },

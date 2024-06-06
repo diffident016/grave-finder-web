@@ -1,223 +1,97 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
-import { ArrowPathIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import React, { useMemo } from "react";
 import { CircularProgress } from "@mui/material";
-import { updateAvailableLots } from "../../api/Services";
-import { show } from "../../states/alerts";
-import { useDispatch } from "react-redux";
 
-function Dashboard({ lots, slots }) {
-  const dispatch = useDispatch();
+function Dashboard({ slots }) {
+  const lots = useMemo(() => {
+    if (slots["fetchState"] != 1) return;
 
-  const [update, setUpdate] = useState(false);
+    const filter = slots["slots"].filter((item) => item["Status"] != "Draft");
 
-  const [form, updateForm] = useReducer(
-    (prev, next) => {
-      return { ...prev, ...next };
-    },
-    {
-      l1A: "",
-      l2A: "",
-      l1R: "",
-      l2R: "",
-    }
-  );
+    const blk = filter.reduce((group, slot) => {
+      const { block_name } = slot;
+      group[block_name.toString().replaceAll("  ", "")] =
+        group[block_name.toString().replaceAll("  ", "")] ?? [];
+      group[block_name.toString().replaceAll("  ", "")].push(slot);
+      return group;
+    }, {});
 
-  const handleSave = () => {
-    const newForm = {
-      "Mausoleum-2": {
-        lots: {
-          available:
-            form.l1A || lots["lots"]["Mausoleum-2"]["lots"]["available"],
-          reserved: form.l1R || lots["lots"]["Mausoleum-2"]["lots"]["reserved"],
-        },
-        name: "Mausoleum-2",
-      },
-      "Memory-F1": {
-        lots: {
-          available: form.l2A || lots["lots"]["Memory-F1"]["lots"]["available"],
-          reserved: form.l2R || lots["lots"]["Memory-F1"]["lots"]["reserved"],
-        },
-        name: "Memory-F1",
-      },
-    };
+    var blocks = Object.keys(blk).map((key) => {
+      var lot = blk[key];
+      var tA = 0;
+      var tR = 0;
 
-    updateAvailableLots(newForm)
-      .then((_) => {
-        dispatch(
-          show({
-            type: "success",
-            message: "Lots updated successfully.",
-            duration: 3000,
-            show: true,
-          })
-        );
-        setUpdate(false);
-      })
-      .catch((err) => {
-        dispatch(
-          show({
-            type: "error",
-            message: "Something went wrong.",
-            duration: 3000,
-            show: true,
-          })
-        );
-        setUpdate(false);
-      });
-  };
+      for (var i = 0; i < lot.length; i++) {
+        if (lot[i]["Status"] == "Available") {
+          tA += 1;
+        }
 
-  const slotsT = useMemo(() => {
-    if (slots["groupSlots"]["Available"] < 1) return [];
+        if (lot[i]["Status"] == "Reserved") {
+          tR += 1;
+        }
+      }
 
-    console.log(slots);
-    // const blk = slots["groupSlots"]["Available"].reduce((group, slot) => {
-    //   const { block_name } = slot;
-    //   group[block_name] = group[block_name] ?? [];
-    //   group[block_name].push(slot);
-    //   return group;
-    // }, {});
+      var temp = {
+        name: key,
+        available: tA,
+        reserved: tR,
+      };
 
-    // var temp = {};
+      return temp;
+    });
 
-    // Object.keys(blk).map((key) => {
-    //   temp[key] = blk[key].map((item) => item["lot_no"]);
-    // });
+    blocks = blocks.sort(function (a, b) {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
 
-    // console.log(temp);
-    // return temp[form.block_name];
+    return blocks;
   }, [slots["slots"]]);
 
   return (
-    <div className="w-full h-full flex flex-col">
-      {lots["fetchState"] != 1 ? (
+    <div className="w-full h-full flex flex-col overflow-hidden">
+      {slots["fetchState"] != 1 ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-2">
           <CircularProgress />
           <p className="text-base">Fetching data...</p>
         </div>
       ) : (
-        <div className="w-full flex flex-col px-8 py-4">
+        <div className="w-full h-full flex flex-col px-8 py-4 overflow-auto">
           <div className="flex flex-row gap-4 items-center">
-            <h1 className="text-2xl font-lato-bold">Available Lots</h1>
-            <h1
-              onClick={() => {
-                if (update) {
-                  handleSave();
-                } else {
-                  setUpdate(!update);
-                }
-              }}
-              className="flex flex-row w-[120px] items-center gap-1 font-lato-bold text-sm cursor-pointer"
-            >
-              {update ? (
-                <PencilSquareIcon className="w-4 h-4" />
-              ) : (
-                <ArrowPathIcon className="w-4 h-4" />
-              )}
-              {update ? "Save" : "Update"}
-            </h1>
+            <h1 className="text-xl font-lato-bold">Available Lots</h1>
           </div>
-
-          <div className="flex flex-row gap-8 py-4">
-            <div className="w-[300px] h-[160px] bg-white rounded-md shadow-sm border-l-4 border-[#4F73DF]">
-              <div className="flex flex-col h-full justify-center px-4 gap-2">
-                {update ? (
-                  <input
-                    type="number"
-                    min={0}
-                    placeholder={
-                      lots["lots"]["Mausoleum-2"]["lots"]["available"]
-                    }
-                    value={form.l1A}
-                    onChange={(e) => {
-                      updateForm({ l1A: e.target.value });
-                    }}
-                    className="font-lato-bold text-4xl text-[#4F73DF] bg-slate-200 rounded-lg px-2"
-                  />
-                ) : (
-                  <h1 className="font-lato-bold text-4xl text-[#4F73DF]">
-                    {lots["lots"]["Mausoleum-2"]["lots"]["available"]}
-                  </h1>
-                )}
-                <h1 className="font-lato-bold text-xl">
-                  {lots["lots"]["Mausoleum-2"]["name"]}
-                </h1>
-              </div>
-            </div>
-            <div className="w-[300px] h-[160px] bg-white rounded-md shadow-sm border-l-4 border-[#4F73DF]">
-              <div className="flex flex-col h-full justify-center px-4 gap-2">
-                {update ? (
-                  <input
-                    type="number"
-                    min={0}
-                    placeholder={lots["lots"]["Memory-F1"]["lots"]["available"]}
-                    value={form.l2A}
-                    onChange={(e) => {
-                      updateForm({ l2A: e.target.value });
-                    }}
-                    className="font-lato-bold text-4xl text-[#4F73DF] bg-slate-200 rounded-lg px-2"
-                  />
-                ) : (
-                  <h1 className="font-lato-bold text-4xl text-[#4F73DF]">
-                    {lots["lots"]["Memory-F1"]["lots"]["available"]}
-                  </h1>
-                )}
-                <h1 className="font-lato-bold text-xl">
-                  {lots["lots"]["Memory-F1"]["name"]}
-                </h1>
-              </div>
-            </div>
+          <div className="grid lg:grid-cols-6 md:grid-cols-3 grid-cols-2 gap-2 pt-4">
+            {lots.map((item) => {
+              return (
+                <div className="w-full h-[80px] bg-white rounded-md shadow-md border-l-4 border-[#4F73DF]">
+                  <div className="flex flex-col h-full justify-center px-2 gap-1">
+                    <h1 className="font-lato-bold text-lg text-[#4F73DF]">
+                      {item["available"]}
+                    </h1>
+                    <h1 className="font-lato-bold text-xs">{item["name"]}</h1>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-
-          <h1 className="text-2xl font-lato-bold pt-4">Reserved Lots</h1>
-          <div className="flex flex-row gap-8 py-4">
-            <div className="w-[300px] h-[160px] bg-white rounded-md shadow-sm border-l-4 border-[#4F73DF]">
-              <div className="flex flex-col h-full justify-center px-4 gap-2">
-                {update ? (
-                  <input
-                    type="number"
-                    min={0}
-                    placeholder={
-                      lots["lots"]["Mausoleum-2"]["lots"]["reserved"]
-                    }
-                    value={form.l1R}
-                    onChange={(e) => {
-                      updateForm({ l1R: e.target.value });
-                    }}
-                    className="font-lato-bold text-4xl text-[#4F73DF] bg-slate-200 rounded-lg px-2"
-                  />
-                ) : (
-                  <h1 className="font-lato-bold text-4xl text-[#4F73DF]">
-                    {lots["lots"]["Mausoleum-2"]["lots"]["reserved"]}
-                  </h1>
-                )}
-                <h1 className="font-lato-bold text-xl">
-                  {lots["lots"]["Mausoleum-2"]["name"]}
-                </h1>
-              </div>
-            </div>
-            <div className="w-[300px] h-[160px] bg-white rounded-md shadow-sm border-l-4 border-[#4F73DF]">
-              <div className="flex flex-col h-full justify-center px-4 gap-2">
-                {update ? (
-                  <input
-                    type="number"
-                    min={0}
-                    placeholder={lots["lots"]["Memory-F1"]["lots"]["reserved"]}
-                    value={form.l2R}
-                    onChange={(e) => {
-                      updateForm({ l2R: e.target.value });
-                    }}
-                    className="font-lato-bold text-4xl text-[#4F73DF] bg-slate-200 rounded-lg px-2"
-                  />
-                ) : (
-                  <h1 className="font-lato-bold text-4xl text-[#4F73DF]">
-                    {lots["lots"]["Memory-F1"]["lots"]["reserved"]}
-                  </h1>
-                )}
-                <h1 className="font-lato-bold text-xl">
-                  {lots["lots"]["Memory-F1"]["name"]}
-                </h1>
-              </div>
-            </div>
+          <h1 className="text-xl font-lato-bold pt-4">Reserved Lots</h1>
+          <div className="grid lg:grid-cols-6 md:grid-cols-3 grid-cols-2 gap-2 pt-4">
+            {lots.map((item) => {
+              return (
+                <div className="w-full h-[80px] bg-white rounded-md shadow-md border-l-4 border-[#4F73DF]">
+                  <div className="flex flex-col h-full justify-center px-2 gap-1">
+                    <h1 className="font-lato-bold text-lg text-[#4F73DF]">
+                      {item["reserved"]}
+                    </h1>
+                    <h1 className="font-lato-bold text-xs">{item["name"]}</h1>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
