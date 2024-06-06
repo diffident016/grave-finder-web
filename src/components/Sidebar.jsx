@@ -27,12 +27,16 @@ function Sidebar({ screens, screen, setScreen }) {
                   {item.icon}
                 </div>
 
-                <p className={`font-lato-bold text-base lg:flex hidden`}>{item.label}</p>
+                <p className={`font-lato-bold text-base lg:flex hidden`}>
+                  {item.label}
+                </p>
               </div>
             );
           })}
         </div>
-        <p className="text-center lg:flex hidden py-4 font-lato">&copy; GraveFinder 2023</p>
+        <p className="text-center lg:flex hidden py-4 font-lato self-center">
+          &copy; GraveFinder 2023
+        </p>
       </div>
     </div>
   );

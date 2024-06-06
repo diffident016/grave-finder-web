@@ -240,7 +240,7 @@ function AdminHomepage({ user }) {
   const screens = [
     {
       label: "Dashboard",
-      component: <Dashboard lots={lots} />,
+      component: <Dashboard lots={lots} slots={slots} />,
       icon: <Squares2X2Icon />,
       header: "",
     },

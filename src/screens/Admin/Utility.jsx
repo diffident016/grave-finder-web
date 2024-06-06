@@ -105,7 +105,6 @@ function Utility({ slots }) {
 
     var newPoly = [];
 
-    console.log(coors);
     if (mode == 0 || (mode == 2 && selected)) {
       newPoly.push(
         L.polygon(coors, {
@@ -540,7 +539,7 @@ function Utility({ slots }) {
         )}
       </Backdrop>
       <PopupDialog
-        show={isDelete}
+        show={!!isDelete}
         close={() => {
           setDelete(null);
         }}

@@ -1,11 +1,11 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { ArrowPathIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { CircularProgress } from "@mui/material";
 import { updateAvailableLots } from "../../api/Services";
 import { show } from "../../states/alerts";
 import { useDispatch } from "react-redux";
 
-function Dashboard({ lots }) {
+function Dashboard({ lots, slots }) {
   const dispatch = useDispatch();
 
   const [update, setUpdate] = useState(false);
@@ -65,6 +65,27 @@ function Dashboard({ lots }) {
         setUpdate(false);
       });
   };
+
+  const slotsT = useMemo(() => {
+    if (slots["groupSlots"]["Available"] < 1) return [];
+
+    console.log(slots);
+    // const blk = slots["groupSlots"]["Available"].reduce((group, slot) => {
+    //   const { block_name } = slot;
+    //   group[block_name] = group[block_name] ?? [];
+    //   group[block_name].push(slot);
+    //   return group;
+    // }, {});
+
+    // var temp = {};
+
+    // Object.keys(blk).map((key) => {
+    //   temp[key] = blk[key].map((item) => item["lot_no"]);
+    // });
+
+    // console.log(temp);
+    // return temp[form.block_name];
+  }, [slots["slots"]]);
 
   return (
     <div className="w-full h-full flex flex-col">
