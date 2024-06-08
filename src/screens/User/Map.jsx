@@ -228,11 +228,15 @@ function Map({ slots, user, setScreen, setNavigation }) {
                 <p className="font-lato-bold text-base">Installment:</p>
                 <div className="flex flex-col">
                   {details["Installment"].split("),").map((item) => {
-                    const installment = `${item}${
-                      item[item.length - 1] == ")" ? "" : ")"
-                    }`;
+                    try {
+                      const installment = `${item}${
+                        item[item.length - 1] == ")" ? "" : ")"
+                      }`;
 
-                    return <p>&#8369;{installment}</p>;
+                      return <p>&#8369;{installment.trim()}</p>;
+                    } catch {
+                      return <p>&#8369;</p>;
+                    }
                   })}
                 </div>
               </div>
