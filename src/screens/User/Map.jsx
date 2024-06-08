@@ -226,7 +226,15 @@ function Map({ slots, user, setScreen, setNavigation }) {
               </div>
               <div className="w-full flex flex-row gap-2">
                 <p className="font-lato-bold text-base">Installment:</p>
-                <p>&#8369;{details["Installment"]}</p>
+                <div className="flex flex-col">
+                  {details["Installment"].split("),").map((item) => {
+                    const installment = `${item}${
+                      item[item.length - 1] == ")" ? "" : ")"
+                    }`;
+
+                    return <p>&#8369;{installment}</p>;
+                  })}
+                </div>
               </div>
             </div>
             {!isSubmit ? (
